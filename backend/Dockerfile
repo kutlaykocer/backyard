@@ -1,5 +1,6 @@
 FROM python:3
 
+ADD analysis.py /
 ADD backend.py /
 ADD storage /storage
 
@@ -7,4 +8,4 @@ ADD storage /storage
 
 ENTRYPOINT ["python", "./backend.py"]
 
-CMD [ "www.backend.example.de" ]
+CMD [ "www.dockerfile.backend.example.de" ]
