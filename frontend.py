@@ -1,10 +1,15 @@
-import backend
+import docker
+import sys
 
 
-url = 'www.tuev-sued.de'
+# Validate input
+url = sys.argv[1] if len(sys.argv) > 1 else 'www.frontent.example.com'
 print('Call for info on ' + url)
 
-json_data = backend.backend_get(url)
+# Call backend
+client = docker.from_env()
+json_data = client.containers.run("backend", url)
 
+# Return result
 print('This is the result:')
 print(json_data)
