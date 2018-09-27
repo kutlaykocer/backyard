@@ -2,6 +2,7 @@ FROM python:3
 
 ADD analysis.py /
 ADD master.py /
+ADD worker.py /
 ADD storage /storage
 
 # RUN pip install json

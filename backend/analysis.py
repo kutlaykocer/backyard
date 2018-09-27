@@ -1,17 +1,23 @@
-import datetime
 import json
+import sys
 
 
-def perform_analysis(url='www.analysis.backend.example.com'):
-    filepath = 'storage/result.json'
+def perform_analysis(url):
+    filepath = 'storage/data_{}.json'.format(url)
+    outfilepath = 'storage/result_{}.json'.format(url)
 
     print('Performing analysis ...')
-    result = {"info": "Everything is analyzed!", "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}", "URL": url}
+    json_data = {}
+    with open(filepath) as f:
+        json_data = json.load(f)
+    json_data["info"] = "Everything is analyzed!"
+    result = json_data
 
     print('Storing results in ' + filepath)
-    with open(filepath, 'w') as outfile:
+    with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
 
 
 if __name__ == '__main__':
-    perform_analysis()
+    url = sys.argv[1] if len(sys.argv) > 1 else 'www.analysis.backend.example.com'
+    perform_analysis(url)
