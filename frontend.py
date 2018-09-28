@@ -8,7 +8,7 @@ print('Call for info on ' + url)
 
 # Call backend
 client = docker.from_env()
-json_data = client.containers.run("backend", url)
+json_data = client.containers.run("backend", command=url, remove=True)
 
 # Return result
 print('This is the result:')
