@@ -21,9 +21,9 @@ docker rm -v storage_container
 ```
 
 ### Master
-Initiated by the frontend script. Build backend image by hand:
+Build backend image:
 ```bash
-docker build -t --volumes-from storage_container backend_image backend
+docker build -t backend_image backend
 ```
 
 ### Clean up
