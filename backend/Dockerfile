@@ -4,7 +4,7 @@ ADD analysis.py /
 ADD master.py /
 ADD worker.py /
 
-# RUN pip install json
+RUN pip install tqdm
 
 ENTRYPOINT ["python", "./master.py"]
 
