@@ -3,8 +3,8 @@ import sys
 
 
 def perform_analysis(url):
-    filepath = 'storage/data_{}.json'.format(url)
-    outfilepath = 'storage/result_{}.json'.format(url)
+    filepath = 'data/data_{}.json'.format(url)
+    outfilepath = 'data/result_{}.json'.format(url)
 
     print('Performing analysis ...')
     json_data = {}

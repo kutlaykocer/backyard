@@ -9,7 +9,7 @@ import worker
 def backend_get(url):
 
     # Check if (valid, up to date) json is already there
-    filepath = 'storage/result_{}.json'.format(url)
+    filepath = 'data/result_{}.json'.format(url)
     if os.path.isfile(filepath):
         print("Returning analysis result of {} to FE ...".format(url))
         with open(filepath) as f:
@@ -19,7 +19,7 @@ def backend_get(url):
         return json_data
     else:
         # Check if data for analysis is already there
-        datapath = 'storage/data_{}.json'.format(url)
+        datapath = 'data/data_{}.json'.format(url)
         if os.path.isfile(datapath):
             analysis.perform_analysis(url)
             return backend_get(url)

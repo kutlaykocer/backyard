@@ -4,7 +4,7 @@ import sys
 
 
 def gather_data(url):
-    filepath = 'storage/data_{}.json'.format(url)
+    filepath = 'data/data_{}.json'.format(url)
 
     print('Gathering data ...')
     result = {"time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}", "URL": url}
