@@ -1,5 +1,8 @@
 # Backyard
 
+## Todo
+- call backend container master from frontend container via HTTP request
+
 ## Setup
 
 ### Storage
@@ -26,6 +29,15 @@ Build backend image:
 docker build -t backend_image backend
 ```
 
+### Frontend
+This is still experimental:
+```bash
+docker build -t webapp_image .
+docker run --volumes-from storage_container -p 5000:5000 --rm -it webapp_image
+# http://localhost:5000/
+```
+
+
 ### Clean up
 Remove all containers and their associated volumes:
 ```bash
@@ -34,4 +46,7 @@ docker rm -v $(docker ps -qa)
 
 
 # Execution
+Until called from web interface:
+```bash
 python frontend.py www.hello.com
+```
