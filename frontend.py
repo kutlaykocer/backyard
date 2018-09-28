@@ -1,5 +1,6 @@
-import docker
 import sys
+
+import docker
 
 
 # Validate input

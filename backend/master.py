@@ -8,7 +8,7 @@ import worker
 
 def backend_get(url):
 
-    # Check if (valid, up to date) json is already there
+    # Check if (valid, up to date) json is already there and return it
     filepath = 'data/result_{}.json'.format(url)
     if os.path.isfile(filepath):
         print("Returning analysis result of {} to FE ...".format(url))
@@ -17,15 +17,16 @@ def backend_get(url):
         print('json data from within backend:')
         print(json_data)
         return json_data
-    else:
-        # Check if data for analysis is already there
-        datapath = 'data/data_{}.json'.format(url)
-        if os.path.isfile(datapath):
-            analysis.perform_analysis(url)
-            return backend_get(url)
-        else:
-            worker.gather_data(url)
-            return backend_get(url)
+
+    # Check if data for analysis is already there and perform analysis
+    datapath = 'data/data_{}.json'.format(url)
+    if os.path.isfile(datapath):
+        analysis.perform_analysis(url)
+        return backend_get(url)
+
+    # Gather reconnessaince data
+    worker.gather_data(url)
+    return backend_get(url)
 
 
 if __name__ == '__main__':
