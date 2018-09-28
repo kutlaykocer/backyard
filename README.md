@@ -5,7 +5,7 @@
 ### Storage
 ```bash
 # Build image
-docker build -t storage_image backend/storage
+docker build -t storage_image storage
 # Create a container whose sole purpose is to persist data
 docker create --name storage_container storage_image
 ```
@@ -21,13 +21,16 @@ docker rm -v storage_container
 ```
 
 ### Master
-Build backend image:
+Initiated by the frontend script. Build backend image by hand:
 ```bash
 docker build -t --volumes-from storage_container backend_image backend
 ```
 
 ### Clean up
-Remove all containers and their associated volumes: `docker rm -v $(docker ps -qa)`
+Remove all containers and their associated volumes:
+```bash
+docker rm -v $(docker ps -qa)
+```
 
 
 # Execution
