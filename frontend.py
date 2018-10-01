@@ -1,16 +1,16 @@
 import sys
 
-import docker
+import requests
 
 
 # Validate input
 url = sys.argv[1] if len(sys.argv) > 1 else 'www.frontend.example.com'
 print('Run python script to call backend for ' + url + ' ...')
 
-# Call backend
-client = docker.from_env()
-json_data = client.containers.run("backend_image", command=url, remove=True, volumes_from="storage_container")
+# payload = {'url': url}
+print('Warning: missing implementation to directly call the analysis')
+r = requests.get('http://localhost:5000/')
 
 # Return result
 print('This is the result:')
-print(json_data.decode())
+print(r.text)
