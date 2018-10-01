@@ -1,8 +1,8 @@
 FROM python:3
 
-ADD analysis.py /
-ADD master.py /
-ADD worker.py /
+COPY analysis.py /
+COPY master.py /
+COPY worker.py /
 
 RUN pip install tqdm
 
