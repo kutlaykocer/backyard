@@ -8,5 +8,5 @@ ADD index.html /
 
 RUN pip install Flask
 
-EXPOSE 8888
+EXPOSE 5000
 CMD ["python", "app.py"]

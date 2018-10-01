@@ -33,9 +33,9 @@ docker build -t backend_image backend
 This is still experimental:
 ```bash
 docker build -t webapp_image frontend
-docker run --volumes-from storage_container -p 8888:8888 --rm -it webapp_image
+docker run --volumes-from storage_container -p 5000:5000 --rm -it webapp_image
 ```
-http://localhost:8888/
+http://localhost:5000/
 
 
 ### Clean up
