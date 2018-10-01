@@ -1,6 +1,7 @@
 # Backyard
 
 ## Todo
+- make backend server, call it via script
 - call backend container master from frontend container via HTTP request
 
 ## Setup
@@ -27,13 +28,14 @@ docker rm -v storage_container
 Build backend image:
 ```bash
 docker build -t backend_image backend
+docker run --volumes-from storage_container -p 5000:5000 --rm -it backend_image
 ```
 
 ### Frontend
 This is still experimental:
 ```bash
 docker build -t webapp_image frontend
-docker run --volumes-from storage_container -p 5000:5000 --rm -it webapp_image
+docker run --volumes-from storage_container -p 8080:8080 --rm -it webapp_image
 ```
 http://localhost:5000/
 
