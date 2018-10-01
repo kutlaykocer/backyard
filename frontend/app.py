@@ -1,20 +1,25 @@
+import json
 import os
 
-from flask import Flask
+import flask
 
-app = Flask(__name__)
+
+app = flask.Flask(__name__)
 
 @app.route('/')
 def hello():
-    message = ""
     datadir = 'data'
+    json_data = {'info': 'empty'}
+    json_data['dir_content'] = {}
     if os.path.isdir(datadir):
-        message += "Folder exists!"
-        message += str(os.listdir(datadir))
+        json_data['info'] = "Folder exists!"
+        for filepath in os.listdir(datadir):
+            with open(os.path.join(datadir, filepath)) as f:
+                json_data['dir_content'].update({filepath: json.load(f)})
     else:
-        message += "Error: Folder doesn't exist!"
-    provider = str(os.environ.get('PROVIDER', 'world'))
-    return 'Hello ' + provider + '!\n' + message
+        json_data['info'] = "Error: Folder doesn't exist!"
+    json_data['message'] = 'Hello {}!'.format('user')
+    return flask.jsonify(json_data)
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
