@@ -11,16 +11,18 @@ def index():
     return flask.render_template('index.html')
 
 @app.route('/request/', methods=['POST'])
-def hello():
+def request_result():
     datadir = 'data'
+    url = flask.request.form['url']
     json_data = {}
-    json_data['url'] = flask.request.form['url']
+    json_data['url'] = url
     json_data['dir_content'] = {}
     if os.path.isdir(datadir):
         for filepath in os.listdir(datadir):
             with open(os.path.join(datadir, filepath)) as f:
                 json_data['dir_content'].update({filepath: json.load(f)})
-    json_data['info'] = "Requesting data for {}".format(json_data['url'])
+    json_data['info'] = "Requesting data for {}".format(url)
+    json_data['result'] = 'Empty'
     return flask.jsonify(json_data)
 
 if __name__ == '__main__':
