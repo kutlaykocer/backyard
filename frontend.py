@@ -5,6 +5,7 @@ import docker
 
 # Validate input
 url = sys.argv[1] if len(sys.argv) > 1 else 'www.frontend.example.com'
+print('Run python script to call backend for ' + url + ' ...')
 
 # Call backend
 client = docker.from_env()
