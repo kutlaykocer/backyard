@@ -8,6 +8,8 @@ import worker
 
 def backend_get(url):
 
+    print('Call for info on ' + url + ' ...')
+
     # Check if (valid, up to date) json is already there and return it
     filepath = 'data/result_{}.json'.format(url)
     if os.path.isfile(filepath):
