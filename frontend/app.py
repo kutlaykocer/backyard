@@ -13,16 +13,14 @@ def index():
 @app.route('/request/', methods=['POST'])
 def hello():
     datadir = 'data'
-    json_data = {'info': 'empty'}
+    json_data = {}
+    json_data['url'] = flask.request.form['url']
     json_data['dir_content'] = {}
     if os.path.isdir(datadir):
-        json_data['info'] = "Folder exists!"
         for filepath in os.listdir(datadir):
             with open(os.path.join(datadir, filepath)) as f:
                 json_data['dir_content'].update({filepath: json.load(f)})
-    else:
-        json_data['info'] = "Error: Folder doesn't exist!"
-    json_data['message'] = 'Hello {}!'.format('user')
+    json_data['info'] = "Requesting data for {}".format(json_data['url'])
     return flask.jsonify(json_data)
 
 if __name__ == '__main__':
