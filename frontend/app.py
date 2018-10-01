@@ -26,6 +26,6 @@ def hello():
     return flask.jsonify(json_data)
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
+    # Bind to PORT if defined, otherwise default to 8888.
+    port = int(os.environ.get('PORT', 8888))
     app.run(host='0.0.0.0', port=port)
