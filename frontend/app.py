@@ -4,9 +4,13 @@ import os
 import flask
 
 
-app = flask.Flask(__name__)
+app = flask.Flask(__name__, template_folder='./')
 
 @app.route('/')
+def index():
+    return flask.render_template('index.html')
+
+@app.route('/request/', methods=['POST'])
 def hello():
     datadir = 'data'
     json_data = {'info': 'empty'}
