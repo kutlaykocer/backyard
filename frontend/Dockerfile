@@ -1,7 +1,4 @@
-FROM ubuntu
-
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q python-all python-pip
+FROM python:3.7
 
 # use pip caching (COPYs and ADDs in this order!)
 COPY requirements.txt /
