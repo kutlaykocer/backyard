@@ -24,7 +24,7 @@ Remove the container with
 docker rm -v storage_container
 ```
 
-### Master
+### Backend
 Build backend image:
 ```bash
 docker build -t backend_image backend
