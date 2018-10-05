@@ -1,29 +1,33 @@
 import json
 import os
+import requests
 
 import flask
 
 
 app = flask.Flask(__name__, template_folder='./')
 
+
 @app.route('/')
 def index():
     return flask.render_template('index.html')
 
+
 @app.route('/request/', methods=['POST'])
-def request_result():
-    datadir = 'data'
+def call_backend():
+    # get environmentals
+    backend_addr = os.environ["BACKEND_PORT_5000_TCP_ADDR"]
+    backend_port = os.environ["BACKEND_PORT_5000_TCP_PORT"]
+    target = "http://{}:{}/request/".format(backend_addr, backend_port)
+    # call backend
     url = flask.request.form['url']
-    json_data = {}
-    json_data['url'] = url
-    json_data['dir_content'] = {}
-    if os.path.isdir(datadir):
-        for filepath in os.listdir(datadir):
-            with open(os.path.join(datadir, filepath)) as f:
-                json_data['dir_content'].update({filepath: json.load(f)})
-    json_data['info'] = "Requesting data for {}".format(url)
-    json_data['result'] = 'Empty'
-    return flask.jsonify(json_data)
+    payload = {'url': url}
+    r = requests.post(target, data=payload)
+    # Return result
+    print('This is the result:')
+    result = r.json()
+    return flask.jsonify(result)
+
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 8080.

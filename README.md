@@ -1,8 +1,10 @@
 # Backyard
 
-## Todo
-- make backend server, call it via script
-- call backend container master from frontend container via HTTP request
+
+## Todo:
+- Deploy on AWS or Heroku
+- Migrate to Kubernetes
+
 
 ## Setup
 
@@ -28,16 +30,22 @@ docker rm -v storage_container
 Build backend image:
 ```bash
 docker build -t backend_image backend
-docker run --volumes-from storage_container -p 5000:5000 --rm -it backend_image
+docker run -d -it --volumes-from storage_container -p 5000:5000 --rm --name backend_container backend_image
 ```
+Check it on http://localhost:5000/
+
 
 ### Frontend
-This is still experimental:
+Build frontend:
 ```bash
 docker build -t webapp_image frontend
-docker run --volumes-from storage_container -p 8080:8080 --rm -it webapp_image
+docker run -d -it -p 8080:8080 --rm --name frontend_container --link backend_container:backend webapp_image
+# Peek inside
+docker run -it --rm  --name frontend_container --link backend_container:backend webapp_image bash
+ping backend  # ping [IP_ADDRESS]
+curl --data "url=www.bash.com" 172.17.0.2:5000/request/ # test backend
 ```
-http://localhost:5000/
+Use it on http://localhost:8080/
 
 
 ### Clean up
@@ -47,8 +55,8 @@ docker rm -v $(docker ps -qa)
 ```
 
 
-# Execution
-Until called from web interface:
+## Execution
+Call backend directly from script:
 ```bash
 python frontend.py www.hello.com
 ```
