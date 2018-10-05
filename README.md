@@ -42,10 +42,14 @@ docker build -t webapp_image frontend
 docker run -d -it -p 8080:8080 --rm --name frontend_container --link backend_container:backend webapp_image
 # Peek inside
 docker run -it --rm  --name frontend_container --link backend_container:backend webapp_image bash
+env  # see available environmental variables, amongst others the backend info
 ping backend  # ping [IP_ADDRESS]
 curl --data "url=www.bash.com" 172.17.0.2:5000/request/ # test backend
 ```
 Use it on http://localhost:8080/
+
+Check networking on docker with `docker network inspect bridge`
+
 
 
 ### Clean up
