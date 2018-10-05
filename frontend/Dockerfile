@@ -1,5 +1,7 @@
 FROM python:3.7
 
+ENV TZ=Europe/Berlin
+
 # use pip caching (COPYs and ADDs in this order!)
 COPY requirements.txt /
 WORKDIR /
