@@ -14,4 +14,7 @@ r = requests.post('http://localhost:5000/request/', data=payload)
 
 # Return result
 print('This is the result:')
-print(r.text)
+result = r.json()
+
+for key in result:
+    print('{}: {}'.format(key, result[key]))
