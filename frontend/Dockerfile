@@ -11,5 +11,4 @@ ENV TZ=Europe/Berlin
 COPY app.py /
 COPY index.html /
 
-EXPOSE 8080
 CMD ["python", "app.py"]
