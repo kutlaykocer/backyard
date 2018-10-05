@@ -40,7 +40,10 @@ Build frontend:
 ```bash
 docker build -t webapp_image frontend
 docker run -d -it -p 8080:8080 --rm --name frontend_container --link backend_container:backend webapp_image
-# Peek inside
+```
+
+Peek inside
+```bash
 docker run -it --rm  --name frontend_container --link backend_container:backend webapp_image bash
 env  # see available environmental variables, amongst others the backend info
 ping backend  # ping [IP_ADDRESS]
