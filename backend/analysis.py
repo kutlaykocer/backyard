@@ -5,9 +5,9 @@ import time
 from tqdm import tqdm
 
 
-def perform_analysis(url):
-    filepath = 'data/data_{}.json'.format(url)
-    outfilepath = 'data/result_{}.json'.format(url)
+def perform_analysis(id, url, domain):
+    filepath = 'data/data_{}.json'.format(id)
+    outfilepath = 'data/result_{}.json'.format(id)
 
     print('Performing analysis ...')
     # dummy analysis
@@ -24,8 +24,3 @@ def perform_analysis(url):
     print('Storing results in ' + filepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
-
-
-if __name__ == '__main__':
-    url = sys.argv[1] if len(sys.argv) > 1 else 'www.analysis.backend.example.com'
-    perform_analysis(url)

@@ -4,17 +4,18 @@ import requests
 
 
 # Validate input
-url = sys.argv[1] if len(sys.argv) > 1 else 'www.frontend.script.example.com'
-print('Run python script to call backend for ' + url + ' ...')
+_id = sys.argv[1] if len(sys.argv) > 1 else 'example'
+_url = sys.argv[2] if len(sys.argv) > 2 else 'www.script.frontend.example.com'
+print('Run python script to call backend for client ' + _id + ' with url ' + _url + ' ...')
 
-
-payload = {'url': url}
+# Call backend
+_payload = {'id': _id, 'url': _url, 'domain': 'script.frontend.example.com'}
 print('Warning: missing implementation to directly call the analysis')
-r = requests.post('http://localhost:5000/request/', data=payload)
+_req = requests.post('http://localhost:5000/request/', data=_payload)
 
 # Return result
 print('This is the result:')
-result = r.json()
+_result = _req.json()
 
-for key in result:
-    print('{}: {}'.format(key, result[key]))
+for key in _result:
+    print('{}: {}'.format(key, _result[key]))

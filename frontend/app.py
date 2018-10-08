@@ -15,20 +15,22 @@ def index():
 @app.route('/request/', methods=['POST'])
 def call_backend():
     # get environmentals
-    backend_addr = os.environ["BACKEND_PORT_5000_TCP_ADDR"]
-    backend_port = os.environ["BACKEND_PORT_5000_TCP_PORT"]
-    target = "http://{}:{}/request/".format(backend_addr, backend_port)
+    _backend_addr = os.environ["BACKEND_PORT_5000_TCP_ADDR"]
+    _backend_port = os.environ["BACKEND_PORT_5000_TCP_PORT"]
+    _target = "http://{}:{}/request/".format(_backend_addr, _backend_port)
     # call backend
-    url = flask.request.form['url']
-    payload = {'url': url}
-    req = requests.post(target, data=payload)
+    _id = flask.request.form['id']
+    _url = flask.request.form['url']
+    _domain = flask.request.form['domain']
+    _payload = {'id': _id, 'url': _url, 'domain': _domain}
+    _req = requests.post(_target, data=_payload)
     # Return result
     print('This is the result:')
-    result = req.json()
-    return flask.jsonify(result)
+    _result = _req.json()
+    return flask.jsonify(_result)
 
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 8080.
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    _port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=_port)
