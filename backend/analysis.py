@@ -5,9 +5,9 @@ import time
 from tqdm import tqdm
 
 
-def perform_analysis(id, url, domain):
-    filepath = 'data/data_{}.json'.format(id)
-    outfilepath = 'data/result_{}.json'.format(id)
+def perform_analysis(form_data):
+    filepath = 'data/data_{}.json'.format(form_data['id'])
+    outfilepath = 'data/result_{}.json'.format(form_data['id'])
 
     print('Performing analysis ...')
     # dummy analysis

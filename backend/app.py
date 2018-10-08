@@ -15,10 +15,12 @@ def index():
 
 @app.route('/request/', methods=['POST'])
 def request_result():
-    _id = flask.request.form['id']
-    _url = flask.request.form['url']
-    _domain = flask.request.form['domain']
-    _result = master.backend_get(id=_id, url=_url, domain=_domain)
+    _form_data = {
+        'id': flask.request.form['id'],
+        'url': flask.request.form['url'],
+        'domain': flask.request.form['domain']
+        }
+    _result = master.backend_get(_form_data)
     return flask.jsonify(_result)
 
 
