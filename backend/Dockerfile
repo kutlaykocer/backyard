@@ -3,7 +3,7 @@ FROM python:3.7
 # use pip caching (COPYs and ADDs in this order!)
 COPY requirements.txt /
 WORKDIR /
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # now add the rest
 ENV TZ=Europe/Berlin
