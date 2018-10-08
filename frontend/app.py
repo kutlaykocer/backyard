@@ -1,7 +1,6 @@
-import json
 import os
-import requests
 
+import requests
 import flask
 
 
@@ -22,10 +21,10 @@ def call_backend():
     # call backend
     url = flask.request.form['url']
     payload = {'url': url}
-    r = requests.post(target, data=payload)
+    req = requests.post(target, data=payload)
     # Return result
     print('This is the result:')
-    result = r.json()
+    result = req.json()
     return flask.jsonify(result)
 
 

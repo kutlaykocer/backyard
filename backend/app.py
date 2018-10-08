@@ -15,7 +15,8 @@ def index():
 @app.route('/request/', methods=['POST'])
 def request_result():
     url = flask.request.form['url']
-    return flask.jsonify(master.backend_get(url))
+    result = master.backend_get(url)
+    return flask.jsonify(result)
 
 
 if __name__ == '__main__':
