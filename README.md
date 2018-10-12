@@ -2,6 +2,7 @@
 
 
 ## Todo:
+- wrap spiderfoot in container
 - Deploy on AWS or Heroku
 - Migrate to Kubernetes
 
@@ -53,6 +54,13 @@ Use it on http://localhost:8080/
 
 Check networking on docker with `docker network inspect bridge`
 
+
+### Tools
+Run spider foot with
+```bash
+docker build -t spiderfoot_image tools/spiderfoot/download
+docker run -it --rm --name spiderfoot_container spiderfoot_image sfcli.py --help
+```
 
 
 ### Clean up

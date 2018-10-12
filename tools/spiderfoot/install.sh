@@ -5,7 +5,7 @@ CHECKSUM=cd2befa8a7cb0fa2f26378f430081f55b1b1eb0c
 
 echo "Downloading $FILENAME ..."
 curl "https://www.spiderfoot.net/files/$FILENAME" --output "$FILENAME"
- 
+
 CHECK_OK=$(echo "$CHECKSUM $FILENAME" |  sha1sum -c -)
 
 if [[ "$CHECK_OK" != *": OK" ]]
@@ -17,6 +17,6 @@ else
 fi
 
 echo Extracting file ...
-mkdir -p spiderfoot
-tar -zxvf "$FILENAME" -C spiderfoot --strip-components=1
-
+mkdir -p download
+tar -zxvf "$FILENAME" -C download --strip-components=1
+rm "$FILENAME"
