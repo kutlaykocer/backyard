@@ -56,12 +56,16 @@ Check networking on docker with `docker network inspect bridge`
 
 
 ### Tools
-Run spider foot with
-```bash
-docker build -t spiderfoot_image tools/spiderfoot/download
-docker run -it --rm --name spiderfoot_container spiderfoot_image sfcli.py --help
-```
-
+* spiderfoot with
+  ```bash
+  docker build -t spiderfoot_image tools/spiderfoot/download
+  docker run -it --rm --name spiderfoot_container spiderfoot_image "sfcli.py --help"
+  ```
+* theharvester
+  ```bash
+  docker build -t theharvester_image tools/theharvester
+  docker run -it --rm --name theharvester_container theharvester_image "--help"
+  ```
 
 ### Clean up
 Remove all containers and their associated volumes:
