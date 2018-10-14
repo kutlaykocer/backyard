@@ -59,7 +59,8 @@ Check networking on docker with `docker network inspect bridge`
 * spiderfoot with
   ```bash
   docker build -t spiderfoot_image tools/spiderfoot/download
-  docker run -it --rm --name spiderfoot_container spiderfoot_image sfcli.py --help
+  docker run -d -p 5009:5001 -it --rm --name spiderfoot_container spiderfoot_image
+  python tools/spiderfoot/download/sfcli.py -s http://localhost:5009
   ```
 * theharvester
   ```bash
