@@ -13,6 +13,7 @@ COPY index.html /
 COPY analysis.py /
 COPY master.py /
 COPY worker.py /
+COPY storage.py /
 
 ENTRYPOINT ["python3", "app.py"]
 

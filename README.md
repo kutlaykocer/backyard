@@ -40,7 +40,7 @@ Check it on http://localhost:5000/
 Build frontend:
 ```bash
 docker build -t webapp_image frontend
-docker run -d -it -p 8080:8080 --rm --link backend_container:backend webapp_image --name frontend_container
+docker run -d -it -p 8080:8080 --rm --link backend_container:backend --name frontend_container webapp_image
 ```
 
 Peek inside

@@ -1,5 +1,5 @@
 import json
-import sys
+import os
 import time
 
 from tqdm import tqdm
@@ -7,9 +7,12 @@ from tqdm import tqdm
 
 def perform_analysis(form_data):
     filepath = 'data/data_{}.json'.format(form_data['id'])
-    outfilepath = 'data/result_{}.json'.format(form_data['id'])
+
+    if not os.path.isfile(filepath):
+        return None
 
     print('Performing analysis ...')
+    outfilepath = 'data/result_{}.json'.format(form_data['id'])
     # dummy analysis
     json_data = {}
     with open(filepath) as f:
@@ -24,3 +27,5 @@ def perform_analysis(form_data):
     print('Storing results in ' + filepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
+
+    return result
