@@ -40,12 +40,12 @@ Check it on http://localhost:5000/
 Build frontend:
 ```bash
 docker build -t webapp_image frontend
-docker run -d -it -p 8080:8080 --rm --name frontend_container --link backend_container:backend webapp_image
+docker run -d -it -p 8080:8080 --rm --link backend_container:backend webapp_image --name frontend_container
 ```
 
 Peek inside
 ```bash
-docker run -it --rm  --name frontend_container --link backend_container:backend webapp_image bash
+docker run -it --rm --link backend_container:backend webapp_image --name frontend_container bash
 env  # see available environmental variables, amongst others the backend info
 ping backend  # ping [IP_ADDRESS]
 curl --data "url=www.bash.com" 172.17.0.2:5000/request/ # test backend
@@ -59,7 +59,7 @@ Check networking on docker with `docker network inspect bridge`
 * set up spiderfoot container with
   ```bash
   docker build -t spiderfoot_image tools/spiderfoot/download
-  docker run -d -p 5001:5001 -it --rm --name spiderfoot_server spiderfoot_image
+  docker run -d -it -p 5001:5001 --rm --name spiderfoot_server spiderfoot_image
   # connect directly via http://localhost:5001/
   ```
   then set up sidecar with
