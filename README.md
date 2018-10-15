@@ -56,11 +56,16 @@ Check networking on docker with `docker network inspect bridge`
 
 
 ### Tools
-* spiderfoot with
+* set up spiderfoot container with
   ```bash
   docker build -t spiderfoot_image tools/spiderfoot/download
-  docker run -d -p 5009:5001 -it --rm --name spiderfoot_container spiderfoot_image
-  python tools/spiderfoot/download/sfcli.py -s http://localhost:5009
+  docker run -d -p 5001:5001 -it --rm --name spiderfoot_container spiderfoot_image
+  # connect directly via http://localhost:5001/
+  ```
+  then set up sidecar with
+  ```bash
+  docker build -t spiderfoot_sidecar_image tools/spiderfoot
+  docker run -it --rm --link spiderfoot_container:spiderfoot --name spiderfoot_sidecar spiderfoot_sidecar_image
   ```
 * theharvester
   ```bash
