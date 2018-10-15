@@ -10,7 +10,6 @@ print('Run python script to call backend for client ' + _id + ' with url ' + _ur
 
 # Call backend
 _payload = {'id': _id, 'url': _url, 'domain': 'script.frontend.example.com'}
-print('Warning: missing implementation to directly call the analysis')
 _req = requests.post('http://localhost:5000/request/', data=_payload)
 
 # Return result
