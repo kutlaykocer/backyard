@@ -3,6 +3,8 @@ from __future__ import print_function
 import os
 
 
+# TODO: make it a webserver and accept url from http request
+
 if __name__ == '__main__':
     url = 'spiderfoot@gmail.com'
     print("Calling the spiderfoot server to analyse {} ...".format(url))
