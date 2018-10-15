@@ -1,7 +1,18 @@
 FROM kalilinux/kali-linux-docker
 
 RUN apt update
-RUN apt install -y theharvester
+RUN apt install -y python3 python3-pip theharvester
+
+# use pip caching (COPYs and ADDs in this order!)
+COPY requirements.txt /
+WORKDIR /
+RUN pip3 install -r requirements.txt
+
+
+ENV TZ=Europe/Berlin
+
+COPY app.py /
 
 # Run the application.
-CMD ["theharvester", "--help"]
+# CMD ["theharvester", "--help"]
+CMD ["python3", "app.py"]

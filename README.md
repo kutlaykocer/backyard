@@ -19,7 +19,7 @@ docker create --name storage_container storage_image
 
 Peek into the storage volume:
 ```bash
-docker run -it --rm --volumes-from storage_container storage_image bash
+docker run -it --rm --volumes-from storage_container storage_image ls /data
 ```
 
 Remove the container with
@@ -31,7 +31,7 @@ docker rm -v storage_container
 Build backend image:
 ```bash
 docker build -t backend_image backend
-docker run -d -it --volumes-from storage_container -p 5000:5000 --rm --name backend_container backend_image
+docker run -d -it -p 5000:5000 --rm --volumes-from storage_container --name backend_container backend_image
 ```
 Check it on http://localhost:5000/
 
@@ -70,7 +70,7 @@ Check networking on docker with `docker network inspect bridge`
 * theharvester
   ```bash
   docker build -t theharvester_image tools/theharvester
-  docker run -it --rm --name theharvester_container theharvester_image theharvester -d microsoft.com -b google
+  docker run -d -it -p 5002:5002 --rm --volumes-from storage_container --name theharvester_container theharvester_image
   ```
 
 ### Clean up
