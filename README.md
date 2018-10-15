@@ -89,6 +89,6 @@ Visit http://localhost:8080/ with your browser
 
 ### Call containers directly via scripts
 ```bash
-python backend.py test_client www.hello.com
-python tools.py test_client www.hello.com
+python call_backend.py test_client www.hello.com
+python call_tools.py test_client www.hello.com
 ```
