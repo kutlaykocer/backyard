@@ -81,7 +81,14 @@ docker rm -v $(docker ps -qa)
 
 
 ## Execution
-Call backend directly from script:
+
+
+### Regular
+Visit http://localhost:8080/ with your browser
+
+
+### Call containers directly via scripts
 ```bash
-python frontend.py www.hello.com
+python backend.py test_client www.hello.com
+python tools.py test_client www.hello.com
 ```
