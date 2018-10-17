@@ -23,7 +23,7 @@ def perform_analysis(form_data):
 
     # if data, perform analysis
     print('[ANALYSIS] perform analysis ...')
-    outfilepath = 'data/{}/result.json'.format(form_data['id'])
+    outfilepath = 'results/{}/result.json'.format(form_data['id'])
     # dummy analysis
     result = {
         "id": form_data['id'],

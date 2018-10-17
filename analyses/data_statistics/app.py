@@ -16,7 +16,7 @@ def do_analysis():
     filepath = 'data/{}/data_*'.format(flask.request.form['id'])
 
     print('perform analysis ...')
-    outfilepath = 'data/{}/result.json'.format(flask.request.form['id'])
+    outfilepath = 'results/{}/result.json'.format(flask.request.form['id'])
     # dummy analysis
     result = {
         "id": flask.request.form['id'],
