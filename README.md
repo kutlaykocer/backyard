@@ -2,7 +2,6 @@
 
 
 ## Todo:
-- wrap spiderfoot in container
 - Deploy on AWS or Heroku
 - Migrate to Kubernetes
 

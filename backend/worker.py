@@ -1,5 +1,6 @@
 import os
 import pathlib
+import re
 import time
 
 import requests
@@ -21,8 +22,11 @@ def gather_data(form_data):
         else:
             print('[WORKER] process ' + tool + ': start')
         # get environmentals
-        _tool_addr = os.environ["{}_PORT_5002_TCP_ADDR".format(tool)]
-        _tool_port = os.environ["{}_PORT_5002_TCP_PORT".format(tool)]
+        key_list = list(dict(os.environ).keys())
+        port_key = list(filter(lambda x: re.match(tool.upper() + r'_PORT_\d{4}_TCP_PORT', x), key_list))[0]
+        port = os.environ[port_key]
+        _tool_addr = os.environ["{}_PORT_{}_TCP_ADDR".format(tool, port)]
+        _tool_port = os.environ["{}_PORT_{}_TCP_PORT".format(tool, port)]
         _target = "http://{}:{}/".format(_tool_addr, _tool_port)
         # send request
         _payload = form_data
