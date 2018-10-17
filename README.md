@@ -7,7 +7,11 @@
 
 
 ## Setup
-
+Run the setup scripts:
+```bash
+./build_services.sh
+./start_services.sh
+```
 
 ### Storage
 ```bash
