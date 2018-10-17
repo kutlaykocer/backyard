@@ -15,6 +15,4 @@ COPY master.py /
 COPY worker.py /
 COPY storage.py /
 
-ENTRYPOINT ["python3", "app.py"]
-
-CMD [ "www.dockerfile.backend.example.de" ]
+CMD ["python", "app.py"]

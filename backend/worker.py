@@ -1,26 +1,34 @@
-import json
-import datetime
+import os
+import pathlib
 import time
 
-from tqdm import tqdm
+import requests
 
 
 def gather_data(form_data):
-    filepath = 'data/data_{}.json'.format(form_data['id'])
+    # make data directory
+    pathlib.Path('data/{}'.format(form_data['id'])).mkdir(parents=True, exist_ok=True)
 
-    print('Gathering data ...')
-    # gather dummy data
-    result = {
-        "id": form_data['id'],
-        "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
-        "URL": form_data['url'],
-        "domain": form_data['domain']
-        }
-    # wait dummy time
-    for i in tqdm(range(0, 10)):
-        time.sleep(0.2)
-        print('- finding important data, part {} ...'.format(i))
+    # call tools
+    _tools = ['THEHARVESTER']
 
-    print('Storing results in ' + filepath)
-    with open(filepath, 'w') as outfile:
-        json.dump(result, outfile)
+    for tool in _tools:
+        # check if process already runs
+        _lock_file = 'data/{}/lock_{}.txt'.format(form_data['id'], tool)
+        if os.path.isfile(_lock_file):
+            print('[WORKER] process ' + tool + ': running, wait for it to finish!')
+            continue
+        else:
+            print('[WORKER] process ' + tool + ': start')
+            os.system('touch {}'.format(_lock_file))
+        # get environmentals
+        _tool_addr = os.environ["{}_PORT_5002_TCP_ADDR".format(tool)]
+        _tool_port = os.environ["{}_PORT_5002_TCP_PORT".format(tool)]
+        _target = "http://{}:{}/".format(_tool_addr, _tool_port)
+        # send request
+        _payload = form_data
+        _payload['lock_file'] = _lock_file
+        _req = requests.post(_target, data=_payload)
+
+    print("[WORKER] wait before returning")
+    time.sleep(5)

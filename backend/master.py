@@ -8,7 +8,7 @@ import worker
 
 def backend_get(form_data):
 
-    print('Call for info on ' + form_data['id'] + ' ...')
+    print('[MASTER] call for info on ' + form_data['id'] + ' ...')
 
     # Check if (valid, up to date) json is already there and if yes, return it
     result = storage.check_storage(form_data)

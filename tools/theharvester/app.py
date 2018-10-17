@@ -28,6 +28,9 @@ def request_result():
     print("Executing: " + _cmd)
     os.system(_cmd)
 
+    # once finish, remove lockfile
+    os.system('rm ' + _form_data['lock_file'])
+
     # return something
     return 'Finished: ' + _cmd
 
