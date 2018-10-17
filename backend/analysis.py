@@ -31,7 +31,7 @@ def perform_analysis(form_data):
         "URL": form_data['url'],
         "domain": form_data['domain'],
         "info": "Everything is analyzed!",
-        "data_files": data_files
+        "data_files": data_files,
         }
     # wait dummy time
     for i in tqdm(range(0, 10)):
