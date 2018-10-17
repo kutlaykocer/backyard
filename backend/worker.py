@@ -23,7 +23,8 @@ def gather_data(form_data):
             print('[WORKER] process ' + tool + ': start')
         # get environmentals
         key_list = list(dict(os.environ).keys())
-        port_key = list(filter(lambda x: re.match(tool.upper() + r'_PORT_\d{4}_TCP_PORT', x), key_list))[0]
+        regex_string = tool.upper() + r'_PORT_\d{4}_TCP_PORT'
+        port_key = list(filter(lambda x: re.match(regex_string, x), key_list))[0]
         port = os.environ[port_key]
         _tool_addr = os.environ["{}_PORT_{}_TCP_ADDR".format(tool, port)]
         _tool_port = os.environ["{}_PORT_{}_TCP_PORT".format(tool, port)]
