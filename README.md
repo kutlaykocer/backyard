@@ -46,6 +46,14 @@ docker build -t theharvester_image tools/theharvester
 docker run -d -it -p 5002:5002 --rm --volumes-from storage_container --name theharvester_container theharvester_image
 ```
 
+
+### Analyses
+```bash
+docker build -t data_statistics_image analyses/data_statistics
+docker run -d -it -p 5003:5003 --rm --volumes-from storage_container --name data_statistics_container data_statistics_image
+```
+
+
 ### Backend
 Build backend image:
 ```bash
