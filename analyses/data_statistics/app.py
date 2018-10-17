@@ -16,7 +16,6 @@ def do_analysis():
     filepath = 'data/{}/data_*'.format(flask.request.form['id'])
 
     print('perform analysis ...')
-    outfilepath = 'results/{}/result.json'.format(flask.request.form['id'])
     # dummy analysis
     result = {
         "id": flask.request.form['id'],
@@ -30,7 +29,9 @@ def do_analysis():
         time.sleep(0.2)
         print('- doing important analysis work, part {} ...'.format(i))
 
-    print('Storing results in ' + filepath)
+    # save results
+    outfilepath = 'results/{}/result.json'.format(flask.request.form['id'])
+    print('Storing results in ' + outfilepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
 
