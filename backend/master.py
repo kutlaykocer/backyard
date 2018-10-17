@@ -18,7 +18,7 @@ def backend_get(form_data):
     # Check if data for analysis is already there and if yes, perform analysis
     result = analysis.perform_analysis(form_data)
     if result:
-        return result
+        return backend_get(form_data)
 
     # Gather reconnessaince data
     worker.gather_data(form_data)

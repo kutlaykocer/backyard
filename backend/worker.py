@@ -8,7 +8,8 @@ import requests
 
 def gather_data(form_data):
     # make data directory
-    pathlib.Path('data/{}'.format(form_data['id'])).mkdir(parents=True, exist_ok=True)
+    _data_dir = 'data/{}'.format(form_data['id'])
+    pathlib.Path(_data_dir).mkdir(parents=True, exist_ok=True)
 
     # call tools
     _tools = ['THEHARVESTER']
@@ -26,8 +27,8 @@ def gather_data(form_data):
         regex_string = tool.upper() + r'_PORT_\d{4}_TCP_PORT'
         port_key = list(filter(lambda x: re.match(regex_string, x), key_list))[0]
         port = os.environ[port_key]
-        _tool_addr = os.environ["{}_PORT_{}_TCP_ADDR".format(tool, port)]
-        _tool_port = os.environ["{}_PORT_{}_TCP_PORT".format(tool, port)]
+        _tool_addr = os.environ["{}_PORT_{}_TCP_ADDR".format(tool.upper(), port)]
+        _tool_port = os.environ["{}_PORT_{}_TCP_PORT".format(tool.upper(), port)]
         _target = "http://{}:{}/".format(_tool_addr, _tool_port)
         # send request
         _payload = form_data
