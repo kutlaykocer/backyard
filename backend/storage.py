@@ -11,5 +11,5 @@ def check_storage(form_data):
     print('[STORAGE] return analysis result of {} ...'.format(form_data['id']))
     with open(filepath) as f:
         json_data = json.load(f)
-        # TODO: check if up to date
+        # TODO: check if analysis result up to date, if not trigger reprocessing
         return json_data

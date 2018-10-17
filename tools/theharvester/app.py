@@ -8,32 +8,20 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def request_result():
-    # get html data
-    _form_data = {
-        'id': flask.request.form['id'],
-        'url': flask.request.form['url'],
-        'domain': flask.request.form['domain'],
-        'lock_file': flask.request.form['lock_file']
-        }
-    _id = _form_data['id']
-    _url = _form_data["domain"]
-
     # define output files
-    _result_file = "/data/{}/data_theharvester.html".format(_id)
+    _result_file = "/data/{}/data_theharvester.html".format(flask.request.form['id'])
 
     # define command
     _data_source = "bing"
-    _cmd = "theharvester -d {} -b {} -f {}".format(_url, _data_source, _result_file)
+    _cmd = "theharvester -d {} -b {} -f {}".format(flask.request.form['domain'], _data_source, _result_file)
 
     # create lockfile
-    os.system('touch {}'.format(_form_data['lock_file']))
-
+    os.system('touch {}'.format(flask.request.form['lock_file']))
     # run it
     print("Executing: " + _cmd)
     os.system(_cmd)
-
-    # once finish, remove lockfile
-    os.system('rm {}'.format(_form_data['lock_file']))
+    # remove lockfile
+    os.system('rm {}'.format(flask.request.form['lock_file']))
 
     # return something
     return 'Finished: ' + _cmd

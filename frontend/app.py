@@ -19,10 +19,10 @@ def call_backend():
     _backend_port = os.environ["BACKEND_PORT_5000_TCP_PORT"]
     _target = "http://{}:{}/request/".format(_backend_addr, _backend_port)
     # call backend
-    _id = flask.request.form['id']
-    _url = flask.request.form['url']
-    _domain = flask.request.form['domain']
-    _payload = {'id': _id, 'url': _url, 'domain': _domain}
+    _payload = {'id': flask.request.form['id'],
+                'url': flask.request.form['url'],
+                'domain': flask.request.form['domain'],
+                }
     _req = requests.post(_target, data=_payload)
     # Return result
     print('This is the result:')
