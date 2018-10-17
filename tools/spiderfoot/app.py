@@ -6,6 +6,7 @@ import os
 # TODO: make it a webserver and accept url from http request
 
 if __name__ == '__main__':
+    id = 'spiderfoot'
     url = 'spiderfoot@gmail.com'
     print("Calling the spiderfoot server to analyse {} ...".format(url))
 
@@ -20,9 +21,9 @@ if __name__ == '__main__':
     with open(_cmd_file, 'w') as f:
         print('start {} -m {}'.format(url, ','.join(modules)), file=f)
 
-    # configure output
-    _output_file = 'sf_output.txt'
-    _log_file = 'sf_log.txt'
+    # define output files
+    _output_file = '/data/{}/data_spiderfoot.txt'.format(id)
+    _log_file = '/data/{}/log_spiderfoot.txt'.format(id)
 
     # run it
     _cmd = "python sfcli.py -s {} -e {} -o {} -l {}".format(_target, _cmd_file, _output_file, _log_file)

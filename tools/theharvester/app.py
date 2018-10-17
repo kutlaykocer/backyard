@@ -17,8 +17,8 @@ def request_result():
     _id = _form_data['id']
     _url = _form_data["domain"]
 
-    # define output file
-    _result_file = "/data/result_theharvester_{}.html".format(_id)
+    # define output files
+    _result_file = "/data/{}/data_theharvester.html".format(_id)
 
     # define command
     _data_source = "bing"
