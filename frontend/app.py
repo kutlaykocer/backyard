@@ -21,7 +21,7 @@ def call_backend():
     # call backend
     _payload = {'id': flask.request.form['id'],
                 'url': flask.request.form['url'],
-                'domain': flask.request.form['domain'],
+                'domain': flask.request.form['url'].split('www.')[1],
                 }
     _req = requests.post(_target, data=_payload)
     # Return result
