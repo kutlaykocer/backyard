@@ -20,7 +20,6 @@ def gather_data(form_data):
             continue
         else:
             print('[WORKER] process ' + tool + ': start')
-            os.system('touch {}'.format(_lock_file))
         # get environmentals
         _tool_addr = os.environ["{}_PORT_5002_TCP_ADDR".format(tool)]
         _tool_port = os.environ["{}_PORT_5002_TCP_PORT".format(tool)]

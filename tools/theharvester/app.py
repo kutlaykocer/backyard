@@ -12,7 +12,8 @@ def request_result():
     _form_data = {
         'id': flask.request.form['id'],
         'url': flask.request.form['url'],
-        'domain': flask.request.form['domain']
+        'domain': flask.request.form['domain'],
+        'lock_file': flask.request.form['lock_file']
         }
     _id = _form_data['id']
     _url = _form_data["domain"]
@@ -24,12 +25,15 @@ def request_result():
     _data_source = "bing"
     _cmd = "theharvester -d {} -b {} -f {}".format(_url, _data_source, _result_file)
 
+    # create lockfile
+    os.system('touch {}'.format(_form_data['lock_file']))
+
     # run it
     print("Executing: " + _cmd)
     os.system(_cmd)
 
     # once finish, remove lockfile
-    os.system('rm ' + _form_data['lock_file'])
+    os.system('rm {}'.format(_form_data['lock_file']))
 
     # return something
     return 'Finished: ' + _cmd

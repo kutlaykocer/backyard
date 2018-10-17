@@ -12,5 +12,4 @@ def check_storage(form_data):
     with open(filepath) as f:
         json_data = json.load(f)
         # TODO: check if up to date
-        print(json_data)
         return json_data
