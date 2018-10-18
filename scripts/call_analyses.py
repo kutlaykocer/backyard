@@ -12,7 +12,7 @@ print('Run python script to call analyses for client ' + _id +
 
 # Call backend
 _payload = {'id': _id, 'url': _url, 'domain': _domain}
-_req = requests.post('http://localhost:5003/', data=_payload)
+_req = requests.post('http://localhost:5004/', data=_payload)
 
 # Return result
 print('This is the result: ')

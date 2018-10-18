@@ -11,6 +11,7 @@ docker build -t theharvester_image tools/theharvester
 
 echo "Build the analyses ..."
 docker build -t data_statistics_image analyses/data_statistics
+docker build -t dummy_analysis_image analyses/dummy_analysis
 
 echo "Build the backend ..."
 docker build -t backend_image backend

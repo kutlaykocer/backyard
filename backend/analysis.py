@@ -24,6 +24,8 @@ def collect_results(analyses, form_data):
         with open(filepath) as result_file:
             json_data = json.load(result_file)
             result[analysis] = json_data
+        _done_file = '/data/results/{}/done_{}.txt'.format(form_data['id'], analysis)
+        os.system('rm {}'.format(_done_file))
 
     outfilepath = '/data/results/{}/result.json'.format(form_data['id'])
     print('[ANALYSIS] storing results in ' + outfilepath)
@@ -50,7 +52,7 @@ def perform_analysis(form_data):
         print('[ANALYSIS] - ' + file)
 
     # call analyses
-    _analyses = ['data_statistics']
+    _analyses = ['data_statistics', 'dummy_analysis']
 
     print("[ANALYSIS] running these analyses:")
     for analysis in _analyses:
@@ -66,9 +68,7 @@ def perform_analysis(form_data):
             continue
         elif is_done[analysis] or os.path.isfile(_done_file):
             print('[ANALYSIS] process ' + analysis + ': done!')
-            if not is_done[analysis]:
-                os.system('rm {}'.format(_done_file))
-                is_done[analysis] = True
+            is_done[analysis] = True
             continue
         else:
             print('[ANALYSIS] process ' + analysis + ': start')
