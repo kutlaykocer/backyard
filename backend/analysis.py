@@ -26,7 +26,7 @@ def collect_results(analyses, form_data):
             result[analysis] = json_data
 
     outfilepath = '/data/results/{}/result.json'.format(form_data['id'])
-    print('Storing results in ' + outfilepath)
+    print('[ANALYSIS] storing results in ' + outfilepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
 
