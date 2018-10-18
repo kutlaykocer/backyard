@@ -80,9 +80,18 @@ func handleScanCompleted(subject string, msg *busapi.ScanCompleted) {
 	fmt.Println(subject)
 	fmt.Println(proto.MarshalTextString(msg))
 
-	// Remove scan from given analysis
+	// TODO: If all scans are completed -> ready
+	ready := true
+	for _, scan := range pendingAnalysis[msg.Id].pendingScanners {
+		if scan.completed != 100 {
+			ready = false
+			break
+		}
+	}
 
-	delete(pendingAnalysis, msg.Id)
+	if ready {
+		fmt.Println("*** all scans done")
+	}
 }
 
 func handleScanStatus(subject string, msg *busapi.ScanCompleted) {
