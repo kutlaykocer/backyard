@@ -32,7 +32,7 @@ def gather_data(form_data):
         _target = "http://{}:{}/".format(_tool_addr, _tool_port)
         # send request
         _payload = form_data
-        _payload['lock_file'] = _lock_file
+        _payload['lockfile'] = _lock_file
         _req = requests.post(_target, data=_payload)
 
     print("[WORKER] wait before returning")

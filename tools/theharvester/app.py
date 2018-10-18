@@ -16,12 +16,12 @@ def request_result():
     _cmd = "theharvester -d {} -b {} -f {}".format(flask.request.form['domain'], _data_source, _result_file)
 
     # create lockfile
-    os.system('touch {}'.format(flask.request.form['lock_file']))
+    os.system('touch {}'.format(flask.request.form['lockfile']))
     # run it
     print("Executing: " + _cmd)
     os.system(_cmd)
     # remove lockfile
-    os.system('rm {}'.format(flask.request.form['lock_file']))
+    os.system('rm {}'.format(flask.request.form['lockfile']))
 
     # return something
     return 'Finished: ' + _cmd

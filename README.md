@@ -62,7 +62,7 @@ docker run -d -it -p 5003:5003 --rm --volumes-from storage_container --name data
 Build backend image:
 ```bash
 docker build -t backend_image backend
-docker run -d -it -p 5000:5000 --rm --volumes-from storage_container --link theharvester_container:theharvester --name backend_container backend_image
+docker run -d -it -p 5000:5000 --rm --volumes-from storage_container --link theharvester_container:theharvester --link data_statistics_container:data_statistics --name backend_container backend_image
 ```
 Check it on http://localhost:5000/
 

@@ -1,5 +1,6 @@
 import datetime
 import json
+import glob
 import os
 import time
 
@@ -12,8 +13,15 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def do_analysis():
+    # create lockfile
+    os.system('touch {}'.format(flask.request.form['lockfile']))
 
-    filepath = '/data/raw/{}/data_*'.format(flask.request.form['id'])
+    # check what data files are available
+    filepath = flask.request.form['datafiles']
+    data_files = glob.glob(filepath)
+    print("found those datafiles:")
+    for file in data_files:
+        print('- ' + file)
 
     print('perform analysis ...')
     # dummy analysis
@@ -22,7 +30,8 @@ def do_analysis():
         "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
         "URL": flask.request.form['url'],
         "domain": flask.request.form['domain'],
-        "info": "Everything is analyzed!",
+        "analysis": flask.request.form['analysis'],
+        "info": "Done",
         }
     # wait dummy time
     for i in tqdm(range(0, 10)):
@@ -30,10 +39,15 @@ def do_analysis():
         print('- doing important analysis work, part {} ...'.format(i))
 
     # save results
-    outfilepath = '/data/results/{}/result.json'.format(flask.request.form['id'])
+    outfilepath = flask.request.form['outfile']
     print('Storing results in ' + outfilepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
+
+    # remove lockfile
+    os.system('rm {}'.format(flask.request.form['lockfile']))
+    # create donefile
+    os.system('touch {}'.format(flask.request.form['donefile']))
 
     # return something
     return 'Finished analysis: ' + flask.request.form['id']
