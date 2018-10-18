@@ -69,6 +69,7 @@ def perform_analysis(form_data):
             if not is_done[analysis]:
                 os.system('rm {}'.format(_done_file))
                 is_done[analysis] = True
+            continue
         else:
             print('[ANALYSIS] process ' + analysis + ': start')
 
