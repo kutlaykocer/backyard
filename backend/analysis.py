@@ -9,13 +9,11 @@ import requests
 
 def perform_analysis(form_data):
     # make results directory
-    _result_dir = 'results/{}'.format(form_data['id'])
+    _result_dir = '/data/results/{}'.format(form_data['id'])
     pathlib.Path(_result_dir).mkdir(parents=True, exist_ok=True)
 
-    print(os.path.isdir(_result_dir))
-
     # check what data files are available
-    filepath = 'data/{}/data_*'.format(form_data['id'])
+    filepath = '/data/raw/{}/data_*'.format(form_data['id'])
     data_files = glob.glob(filepath)
 
     # if no data, call worker
@@ -32,7 +30,7 @@ def perform_analysis(form_data):
 
     for analysis in _analyses:
         # check if process already runs
-        _lock_file = 'results/{}/lock_{}.txt'.format(form_data['id'], analysis)
+        _lock_file = '/data/results/{}/lock_{}.txt'.format(form_data['id'], analysis)
         if os.path.isfile(_lock_file):
             print('[ANALYSIS] process ' + analysis + ': running, wait for it to finish!')
             continue

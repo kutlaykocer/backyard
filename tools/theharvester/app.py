@@ -9,7 +9,7 @@ app = flask.Flask(__name__)
 @app.route('/', methods=['POST'])
 def request_result():
     # define output files
-    _result_file = "/data/{}/data_theharvester.html".format(flask.request.form['id'])
+    _result_file = "/data/raw/{}/data_theharvester.html".format(flask.request.form['id'])
 
     # define command
     _data_source = "bing"

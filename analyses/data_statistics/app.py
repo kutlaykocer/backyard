@@ -13,7 +13,7 @@ app = flask.Flask(__name__)
 @app.route('/', methods=['POST'])
 def do_analysis():
 
-    filepath = 'data/{}/data_*'.format(flask.request.form['id'])
+    filepath = '/data/raw/{}/data_*'.format(flask.request.form['id'])
 
     print('perform analysis ...')
     # dummy analysis
@@ -30,7 +30,7 @@ def do_analysis():
         print('- doing important analysis work, part {} ...'.format(i))
 
     # save results
-    outfilepath = 'results/{}/result.json'.format(flask.request.form['id'])
+    outfilepath = '/data/results/{}/result.json'.format(flask.request.form['id'])
     print('Storing results in ' + outfilepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)

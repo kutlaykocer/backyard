@@ -3,7 +3,7 @@ import os
 
 
 def check_storage(form_data):
-    filepath = 'results/{}/result.json'.format(form_data['id'])
+    filepath = '/data/results/{}/result.json'.format(form_data['id'])
 
     if not os.path.isfile(filepath):
         return None
