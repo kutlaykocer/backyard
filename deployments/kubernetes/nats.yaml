@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  labels:
+    app: nats
+spec:
+  selector:
+    app: nats
+  clusterIP: None
+  ports:
+  - name: client
+    port: 4222
+  - name: cluster
+    port: 6222
+  - name: monitor
+    port: 8222
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: nats
+  labels:
+    app: nats
+spec:
+  serviceName: nats
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      securityContext:
+        runAsUser: 9000
+        runAsGroup: 9000
+        fsGroup: 9000
+      containers:
+      - name: nats
+        image: nats:latest
+        imagePullPolicy: IfNotPresent
+        args: [ "--config", "/etc/nats/config/nats.conf"]
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/nats/config
+        env:
+        - name: NATS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: nats-credentials
+              key: username
+        - name: NATS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nats-credentials
+              key: password
+        - name: NATS_CLUSTER_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: nats-cluster-credentials
+              key: username
+        - name: NATS_CLUSTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nats-cluster-credentials
+              key: password
+        - name: NATS_CLUSTER_ROUTE
+          valueFrom:
+            secretKeyRef:
+              name: nats-cluster-credentials
+              key: url
+        ports:
+        - containerPort: 4222
+          name: client
+        - containerPort: 6222
+          name: cluster
+        - containerPort: 8222
+          name: monitor
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8222
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+      volumes:
+      - name: config-volume
+        configMap:
+          name: nats-config
+

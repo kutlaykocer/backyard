@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analyzer
+  labels:
+    app: analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analyzer
+  template:
+    metadata:
+      labels:
+        app: analyzer
+    spec:
+      securityContext:
+        runAsUser: 9001
+        runAsGroup: 9001
+        fsGroup: 9001
+      containers:
+      - name: analyzer
+        image: analyzer:latest
+        imagePullPolicy: Never
+        env:
+        - name: NATS_URL
+          valueFrom:
+            secretKeyRef:
+              name: nats-credentials
+              key: url
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: url

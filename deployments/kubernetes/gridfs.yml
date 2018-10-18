@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gridfs
+  labels:
+    app: gridfs
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    app: gridfs
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gridfs
+spec:
+  serviceName: "gridfs"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gridfs
+  template:
+    metadata:
+      labels:
+        app: gridfs
+    spec:
+      securityContext:
+        runAsUser: 9002
+        runAsGroup: 9002
+        fsGroup: 9002
+      volumes:
+      - name: datadir
+        persistentVolumeClaim:
+          claimName: analysis-storage
+      containers:
+      - name: mongodb
+        image: mongo:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: datadir
+          mountPath: /data/db
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-admin-credentials
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD 
+          valueFrom:
+            secretKeyRef:
+              name: mongo-admin-credentials
+              key: password
+      terminationGracePeriodSeconds: 60
+  updateStrategy:
+    type: RollingUpdate

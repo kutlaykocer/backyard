@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scanner
+  labels:
+    app: scanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scanner
+  template:
+    metadata:
+      labels:
+        app: scanner
+    spec:
+      securityContext:
+        runAsUser: 9001
+        runAsGroup: 9001
+        fsGroup: 9001
+      containers:
+      - name: scanner
+        image: gitlab-registry.gonicus.de/tuv/registry/scanner:latest
+        env:
+        - name: NATS_URL
+          valueFrom:
+            secretKeyRef:
+              name: nats-credentials
+              key: url

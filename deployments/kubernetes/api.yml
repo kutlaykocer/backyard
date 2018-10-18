@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      securityContext:
+        runAsUser: 9001
+        runAsGroup: 9001
+        fsGroup: 9001
+      containers:
+      - name: api
+        image: gitlab-registry.gonicus.de/tuv/registry/api:latest
+        env:
+        - name: NATS_URL
+          valueFrom:
+            secretKeyRef:
+              name: nats-credentials
+              key: url

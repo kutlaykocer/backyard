@@ -1,0 +1,19 @@
+FROM golang:1.11-alpine3.8 AS build
+RUN apk add --no-cache git build-base && \
+    adduser -D -u 9989 builder && \
+    mkdir /build && \
+    chown -R builder: /build
+
+USER builder
+COPY . /build
+WORKDIR /build
+RUN make analyzer
+
+
+FROM alpine:3.8
+WORKDIR /app
+COPY --from=build /build/bin/analyzer /app/
+
+RUN adduser -D -u 9988 -h /app app
+USER app
+CMD ["/app/analyzer"]

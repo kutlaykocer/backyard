@@ -1,0 +1,12 @@
+#!/bin/sh
+
+pkill -f "kubectl port-forward"
+[ "x$1" == "xclear" ] && exit 0
+
+echo "Enabling forward in background. Use \"pf clear\" to disable. See $HOME/pf.log for details."
+
+(
+	kubectl port-forward nats-0 4222 &
+	kubectl port-forward gridfs-0 27017 &
+) &> ~/pf.log
+
