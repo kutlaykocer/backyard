@@ -86,7 +86,7 @@ def perform_analysis(form_data):
         _payload['lockfile'] = _lock_file
         _payload['donefile'] = _done_file
         _payload['outfile'] = '/data/results/{}/result_{}.json'.format(form_data['id'], analysis)
-        _payload['datafiles'] = '/data/raw/{}/data_*'.format(form_data['id'])
+        _payload['datadir'] = '/data/raw/{}/'.format(form_data['id'])
         _payload['analysis'] = analysis.lower()
         _req = requests.post(_target, data=_payload)
 

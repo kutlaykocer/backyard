@@ -1,11 +1,11 @@
 import datetime
-import json
 import glob
+import json
 import os
-import time
 
 import flask
-from tqdm import tqdm
+
+import analysis
 
 
 app = flask.Flask(__name__)
@@ -17,14 +17,14 @@ def do_analysis():
     os.system('touch {}'.format(flask.request.form['lockfile']))
 
     # check what data files are available
-    filepath = flask.request.form['datafiles']
-    data_files = glob.glob(filepath)
+    data_dir = flask.request.form['datadir']
+    data_files = glob.glob(data_dir + "*")
     print("found those datafiles:")
     for file in data_files:
         print('- ' + file)
 
     print('perform analysis ...')
-    # dummy analysis
+
     result = {
         "id": flask.request.form['id'],
         "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
@@ -33,10 +33,8 @@ def do_analysis():
         "analysis": flask.request.form['analysis'],
         "info": "Done",
         }
-    # wait dummy time
-    for i in tqdm(range(0, 10)):
-        time.sleep(0.2)
-        print('- doing important analysis work, part {} ...'.format(i))
+
+    result['result'] = analysis.run(data_dir)
 
     # save results
     outfilepath = flask.request.form['outfile']

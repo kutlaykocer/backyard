@@ -9,5 +9,6 @@ RUN pip install -r requirements.txt
 ENV TZ=Europe/Berlin
 
 COPY app.py /
+COPY analysis.py /
 
 CMD ["python", "app.py"]
