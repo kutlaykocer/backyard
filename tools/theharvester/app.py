@@ -22,6 +22,8 @@ def request_result():
     os.system(_cmd)
     # remove lockfile
     os.system('rm {}'.format(flask.request.form['lockfile']))
+    # create donefile
+    os.system('touch {}'.format(flask.request.form['donefile']))
 
     # return something
     return 'Finished: ' + _cmd

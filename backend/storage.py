@@ -1,9 +1,11 @@
 import json
 import os
 
+import env
+
 
 def check_storage(form_data):
-    filepath = '/data/results/{}/result.json'.format(form_data['id'])
+    filepath = env.analysis(form_data['id'])['resultfile']
 
     if not os.path.isfile(filepath):
         return None

@@ -21,5 +21,6 @@ def backend_get(form_data):
         return backend_get(form_data)
 
     # Gather reconnessaince data
-    worker.gather_data(form_data)
+    while worker.gather_data(form_data) != 'DONE':
+        pass
     return backend_get(form_data)
