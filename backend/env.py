@@ -8,8 +8,6 @@ def dirs(cid):
 def analysis(cid, name=''):
     _dir = dirs(cid)['resultdir']
     return {
-        'lockfile': '{}/lock_{}.txt'.format(_dir, name),
-        'donefile': '{}/done_{}.txt'.format(_dir, name),
         'outfile': '{}/result_{}.json'.format(_dir, name),
         'resultfile': '{}/result.json'.format(_dir),
         'datadir': dirs(cid)['datadir'],

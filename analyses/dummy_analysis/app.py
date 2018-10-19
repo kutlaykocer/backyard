@@ -13,9 +13,6 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def do_analysis():
-    # create lockfile
-    os.system('touch {}'.format(flask.request.form['lockfile']))
-
     # check what data files are available
     data_dir = flask.request.form['datadir']
     data_files = glob.glob(data_dir + "*")
@@ -41,11 +38,6 @@ def do_analysis():
     print('Storing results in ' + outfilepath)
     with open(outfilepath, 'w') as outfile:
         json.dump(result, outfile)
-
-    # remove lockfile
-    os.system('rm {}'.format(flask.request.form['lockfile']))
-    # create donefile
-    os.system('touch {}'.format(flask.request.form['donefile']))
 
     # return something
     return 'Finished analysis: ' + flask.request.form['id']
