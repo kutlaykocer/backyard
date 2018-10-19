@@ -6,7 +6,7 @@ import storage
 import worker
 
 
-def backend_get(form_data):
+def master_get(form_data):
 
     print('[MASTER] call for info on ' + form_data['id'] + ' ...')
 
@@ -18,9 +18,9 @@ def backend_get(form_data):
     # Check if data for analysis is already there and if yes, perform analysis
     result = analysis.perform_analysis(form_data)
     if result:
-        return backend_get(form_data)
+        return master_get(form_data)
 
     # Gather reconnessaince data
     while worker.gather_data(form_data) != 'DONE':
         pass
-    return backend_get(form_data)
+    return master_get(form_data)

@@ -20,7 +20,7 @@ def request_result():
         'url': flask.request.form['url'],
         'domain': flask.request.form['domain']
         }
-    _result = master.backend_get(_form_data)
+    _result = master.master_get(_form_data)
     return flask.jsonify(_result)
 
 

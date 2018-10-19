@@ -13,12 +13,12 @@ def index():
 
 
 @app.route('/request/', methods=['POST'])
-def call_backend():
+def call_master():
     # get environmentals
-    _backend_addr = os.environ["BACKEND_PORT_5000_TCP_ADDR"]
-    _backend_port = os.environ["BACKEND_PORT_5000_TCP_PORT"]
-    _target = "http://{}:{}/request/".format(_backend_addr, _backend_port)
-    # call backend
+    _master_addr = os.environ["MASTER_PORT_5000_TCP_ADDR"]
+    _master_port = os.environ["MASTER_PORT_5000_TCP_PORT"]
+    _target = "http://{}:{}/request/".format(_master_addr, _master_port)
+    # call master
     _payload = {'id': flask.request.form['id'],
                 'url': flask.request.form['url'],
                 'domain': flask.request.form['url'].split('www.')[1],

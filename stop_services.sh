@@ -6,7 +6,7 @@ docker stop \
 theharvester_container \
 data_statistics_container \
 dummy_analysis_container \
-backend_container \
+master_container \
 frontend_container
 
 echo "Done!"

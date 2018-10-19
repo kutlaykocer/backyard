@@ -10,7 +10,7 @@ _domain = _url.split('www.')[-1]
 print('Run python script to call analyses for client ' + _id +
       ' with url ' + _url + ' and domain ' + _domain + ' ...')
 
-# Call backend
+# Call master
 _payload = {'id': _id, 'url': _url, 'domain': _domain}
 _req = requests.post('http://localhost:5004/', data=_payload)
 
