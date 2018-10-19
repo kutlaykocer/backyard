@@ -23,7 +23,7 @@ def do_analysis():
     for file in data_files:
         print('- ' + file)
 
-    print('perform analysis ...')
+    print('perform analysis {} ...'.format(flask.request.form['analysis']))
 
     result = {
         "id": flask.request.form['id'],
