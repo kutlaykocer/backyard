@@ -23,7 +23,7 @@ def collect_results(analyses, form_data):
     for ana in analyses:
         _file_path = env.analysis(_cid, ana)['outfile']
         with open(_file_path) as result_file:
-            result[ana] = json.load(result_file)
+            result['analysis_' + ana] = json.load(result_file)
 
     _outfile_path = env.analysis(_cid)['resultfile']
     print('[ANALYSIS] storing results in ' + _outfile_path)

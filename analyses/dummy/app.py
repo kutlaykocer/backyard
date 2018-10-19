@@ -2,6 +2,7 @@ import datetime
 import glob
 import json
 import os
+import time
 
 import flask
 
@@ -24,14 +25,22 @@ def do_analysis():
 
     result = {
         "id": flask.request.form['id'],
-        "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
+        "time_start_wall": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
         "URL": flask.request.form['url'],
         "domain": flask.request.form['domain'],
         "analysis": flask.request.form['analysis'],
         "info": "Done",
         }
 
+    # run the analysis
+    wall_start = time.time()
+    cpu_start = time.process_time()
     result['result'] = analysis.run(data_dir)
+    wall_end = time.time()
+    cpu_end = time.process_time()
+    result['time_duration_wall'] = wall_end - wall_start
+    result['time_duration_cpu'] = cpu_end - cpu_start
+    result['time_end_wall'] = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}"
 
     # save results
     outfilepath = flask.request.form['outfile']
