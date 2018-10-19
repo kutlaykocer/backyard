@@ -14,5 +14,6 @@ COPY analysis.py /
 COPY master.py /
 COPY worker.py /
 COPY storage.py /
+COPY job_mng.py /
 
 CMD ["python", "app.py"]
