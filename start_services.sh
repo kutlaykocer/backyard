@@ -2,7 +2,7 @@
 
 echo "Starting all docker services ..."
 
-echo "Start the tools ..."
+echo "Start the scanners ..."
 docker run -d -it -p 5002:5002 --rm --volumes-from storage_container --name theharvester_container theharvester_image
 
 echo "Start the analyses ..."

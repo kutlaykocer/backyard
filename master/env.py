@@ -1,7 +1,7 @@
 def dirs(cid):
     return {
-        'datadir': '/data/raw/{}/'.format(cid),
-        'resultdir': '/data/results/{}/'.format(cid),
+        'datadir': '/data/scan_results/{}/'.format(cid),
+        'resultdir': '/data/analysis_results/{}/'.format(cid),
     }
 
 
@@ -14,7 +14,7 @@ def analysis(cid, name=''):
         'resultdir': _dir,
     }
 
-def worker(cid, name=''):
+def scanner(cid, name=''):
     _dir = dirs(cid)['datadir']
     return {
         'lockfile': '{}/lock_{}.txt'.format(_dir, name),

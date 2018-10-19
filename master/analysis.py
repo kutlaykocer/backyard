@@ -40,7 +40,7 @@ def perform_analysis(form_data):
     pathlib.Path(env.analysis(_cid)['resultdir']).mkdir(parents=True, exist_ok=True)
 
     # check what data files are available
-    if not os.path.isfile(env.worker(_cid)['resultfile']):
+    if not os.path.isfile(env.scanner(_cid)['resultfile']):
         print('[ANALYSIS] no data files available')
         return None
 

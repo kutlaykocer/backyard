@@ -7,7 +7,7 @@ import requests
 _id = sys.argv[1] if len(sys.argv) > 1 else 'example'
 _url = sys.argv[2] if len(sys.argv) > 2 else 'www.microsoft.com'
 _domain = _url.split('www.')[-1]
-print('Run python script to call tools for client ' + _id +
+print('Run python script to call scanners for client ' + _id +
       ' with url ' + _url + ' and domain ' + _domain + ' ...')
 
 # Call master

@@ -1,9 +1,6 @@
-import json
-import os
-
 import analysis
 import storage
-import worker
+import scanner
 
 
 def master_get(form_data):
@@ -21,6 +18,6 @@ def master_get(form_data):
         return master_get(form_data)
 
     # Gather reconnessaince data
-    while worker.gather_data(form_data) != 'DONE':
+    while scanner.gather_data(form_data) != 'DONE':
         pass
     return master_get(form_data)

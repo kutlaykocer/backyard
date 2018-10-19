@@ -35,18 +35,18 @@ docker rm -v storage_container
 ### Tools
 * set up spiderfoot container with
 ```bash
-docker build -t spiderfoot_image tools/spiderfoot/download
+docker build -t spiderfoot_image scanners/spiderfoot/download
 docker run -d -it -p 5001:5001 --rm --name spiderfoot_server spiderfoot_image
 # connect directly via http://localhost:5001/
 ```
 then set up sidecar with
 ```bash
-docker build -t spiderfoot_sidecar_image tools/spiderfoot
+docker build -t spiderfoot_sidecar_image scanners/spiderfoot
 docker run -it --rm --link spiderfoot_server:spiderfoot --name spiderfoot_sidecar spiderfoot_sidecar_image
 ```
 * theharvester
 ```bash
-docker build -t theharvester_image tools/theharvester
+docker build -t theharvester_image scanners/theharvester
 docker run -d -it -p 5002:5002 --rm --volumes-from storage_container --name theharvester_container theharvester_image
 ```
 
@@ -103,5 +103,5 @@ Visit http://localhost:8080/ with your browser
 ### Call containers directly via scripts
 ```bash
 python call_master.py test_client www.hello.com
-python call_tools.py test_client www.hello.com
+python call_scanners.py test_client www.hello.com
 ```

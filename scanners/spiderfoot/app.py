@@ -22,8 +22,8 @@ if __name__ == '__main__':
         print('start {} -m {}'.format(url, ','.join(modules)), file=f)
 
     # define output files
-    _output_file = '/data/raw/{}/data_spiderfoot.txt'.format(id)
-    _log_file = '/data/raw/{}/log_spiderfoot.txt'.format(id)
+    _output_file = '/data/scan_results/{}/data_spiderfoot.txt'.format(id)
+    _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(id)
 
     # run it
     _cmd = "python sfcli.py -s {} -e {} -o {} -l {}".format(_target, _cmd_file, _output_file, _log_file)
