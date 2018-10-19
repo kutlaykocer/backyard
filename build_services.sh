@@ -6,12 +6,12 @@ echo "Build the storage ..."
 docker build -t storage_image storage
 docker create --name storage_container storage_image
 
-echo "Build the scanners ..."
-docker build -t theharvester_image scanners/theharvester
+echo "Build the scans ..."
+docker build -t scan_theharvester_image scans/theharvester
 
 echo "Build the analyses ..."
-docker build -t data_statistics_image analyses/data_statistics
-docker build -t dummy_analysis_image analyses/dummy_analysis
+docker build -t analysis_data_statistics_image analyses/data_statistics
+docker build -t analysis_dummy_image analyses/dummy
 
 echo "Build the master ..."
 docker build -t master_image master

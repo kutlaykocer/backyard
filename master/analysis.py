@@ -32,7 +32,7 @@ def collect_results(analyses, form_data):
 
 
 def perform_analysis(form_data):
-    _analyses = ['data_statistics', 'dummy_analysis']
+    _analyses = ['data_statistics', 'dummy']
 
     _cid = form_data['id']
 
@@ -40,7 +40,7 @@ def perform_analysis(form_data):
     pathlib.Path(env.analysis(_cid)['resultdir']).mkdir(parents=True, exist_ok=True)
 
     # check what data files are available
-    if not os.path.isfile(env.scanner(_cid)['resultfile']):
+    if not os.path.isfile(env.scan(_cid)['resultfile']):
         print('[ANALYSIS] no data files available')
         return None
 

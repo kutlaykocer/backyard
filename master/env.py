@@ -14,7 +14,7 @@ def analysis(cid, name=''):
         'resultdir': _dir,
     }
 
-def scanner(cid, name=''):
+def scan(cid, name=''):
     _dir = dirs(cid)['datadir']
     return {
         'lockfile': '{}/lock_{}.txt'.format(_dir, name),

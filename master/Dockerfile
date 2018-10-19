@@ -12,7 +12,7 @@ COPY app.py /
 COPY index.html /
 COPY analysis.py /
 COPY master.py /
-COPY scanner.py /
+COPY scan.py /
 COPY storage.py /
 COPY job_mng.py /
 COPY env.py /

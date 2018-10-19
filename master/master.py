@@ -1,6 +1,6 @@
 import analysis
 import storage
-import scanner
+import scan
 
 
 def master_get(form_data):
@@ -18,6 +18,6 @@ def master_get(form_data):
         return master_get(form_data)
 
     # Gather reconnessaince data
-    while scanner.gather_data(form_data) != 'DONE':
+    while scan.gather_data(form_data) != 'DONE':
         pass
     return master_get(form_data)

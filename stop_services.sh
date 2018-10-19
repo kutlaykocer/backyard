@@ -3,9 +3,9 @@
 echo "Stopping all docker services ..."
 
 docker stop \
-theharvester_container \
-data_statistics_container \
-dummy_analysis_container \
+scan_theharvester_container \
+analysis_data_statistics_container \
+analysis_dummy_container \
 master_container \
 frontend_container
 
