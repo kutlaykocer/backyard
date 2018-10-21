@@ -21,6 +21,10 @@ Visit http://localhost:8080/ with your browser
 
 ## Misc
 
+### NATS
+
+Visit http://localhost:8222/ to monitor the NATS server
+
 ### Storage
 Peek into the storage volume:
 ```bash

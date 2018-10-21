@@ -1,14 +1,14 @@
+# based on https://github.com/nats-io/asyncio-nats
+
 import asyncio
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
 
 
 async def run(loop):
-
     print("Testing NATS communication!")
 
     nc = NATS()
-
     await nc.connect("nats://localhost:4222", loop=loop)
 
     async def message_handler(msg):
