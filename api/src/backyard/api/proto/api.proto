@@ -1,0 +1,78 @@
+syntax = "proto3";
+package busapi;
+
+// Common request codes
+enum ResultCode {
+	OK = 0;
+	FAIL = 1;
+}
+
+// Analyzer Status
+enum Status {
+	READY = 0;
+	PENDING = 1;
+	WAITING = 2;
+	SCANNING = 3;
+	ANALYZING = 4;
+
+	TIMEOUT = 14;
+	ERROR = 15;
+}
+
+// Bitmask to select requested scanners
+enum Scanner {
+	NONE = 0;
+	HARVESTER = 1;
+	SPIDERFOOT = 2;
+}
+
+message AnalyserRequest {
+	// Domain parameter to be scanned
+	string domain = 1;
+
+	// Bitmask of "Scanner" enum which enables certain scanners
+	uint32 scanner = 2;
+}
+
+message AnalyserResponse {
+	// Well - the return code
+	ResultCode code = 1;
+
+	// Unique ID for this analyser run
+	string id = 2;
+}
+
+message ScanRequest {
+	// ID of the calling analyzer run
+	string id = 1;
+
+	// Domain parameter to be scanned
+	string domain = 2;
+}
+
+message ScanResponse {
+	// Well - the return code
+	ResultCode code = 1;
+}
+
+message ScanCompleted {
+	// ID of the calling analyzer run
+	string id = 1;
+
+	// Base path for scan result
+	string path = 2;
+}
+
+message JobStatus {
+	// ID of the analyzer run
+	string id = 1;
+
+	// Current scan/analyzer status
+	Status status = 2;
+
+	// Optional description i.e. for certain scan stages
+	string description = 3;
+
+	// Approximated percent completed
+	uint32 completed = 4;
+}
