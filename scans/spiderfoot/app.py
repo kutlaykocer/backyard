@@ -30,7 +30,7 @@ if __name__ == '__main__':
     url = 'spiderfoot@gmail.com'
 
     # register modules
-    modules = ['sfp_pwned']
+    modules = ['sfp_pwned', 'sfp_phishtank', 'sfp_pastebin']
 
     print("Calling the spiderfoot server to analyse {} using those modules:".format(url))
     for module in modules:
