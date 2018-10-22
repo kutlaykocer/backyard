@@ -4,15 +4,21 @@ import os
 import re
 import time
 
+import requests
+
 
 # TODO: make it a webserver and accept url from http request
 
 
-def run_sf_cid(cmd, cid, log):
+def html_target():
     # get environmentals
     _master_addr = os.environ["SCAN_SPIDERFOOT_PORT_5001_TCP_ADDR"]
     _master_port = os.environ["SCAN_SPIDERFOOT_PORT_5001_TCP_PORT"]
     _target = "http://{}:{}".format(_master_addr, _master_port)
+    return _target
+
+
+def run_sf_cid(cmd, cid, log):
     # prepare cmd
     _cmd_file = 'sf_cmd.txt'
     with open(_cmd_file, 'w') as myfile:
@@ -20,7 +26,7 @@ def run_sf_cid(cmd, cid, log):
     # prepare other input
     _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(cid)
     _tmp_log_file = '/data/scan_results/{}/log_spiderfoot_tmp.txt'.format(cid)
-    _shell_cmd = "python sfcli.py -s {} -e {} -o {}".format(_target, _cmd_file, _tmp_log_file)
+    _shell_cmd = "python sfcli.py -s {} -e {} -o {}".format(html_target(), _cmd_file, _tmp_log_file)
     print("Executing: " + _shell_cmd + " with spiderfoot command " + cmd)
     # call sf
     os.system('rm ' + _tmp_log_file)
@@ -81,8 +87,13 @@ def get_spiderfoot_result():
     run_sf('scans -x')
 
     # download results
+    response = requests.get(html_target() + "/scaneventresultexportmulti?ids={}".format(scan_id))
     _output_file = '/data/scan_results/{}/data_spiderfoot.txt'.format(cid)
     print('Saving scan results in ' + _output_file)
+    with open(_output_file, 'w') as myfile:
+        print(response.text, file=myfile)
+
+    print("Done!")
 
 
 if __name__ == '__main__':
