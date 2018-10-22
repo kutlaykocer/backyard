@@ -9,9 +9,14 @@
 ## Setup
 Run the setup scripts, depending on your needs:
 ```bash
-./build_services.sh
-./start_services.sh
-./stop_services.sh
+./scrpts/pull_images.sh
+./scrpts/build_services.sh
+./scrpts/start_services.sh
+./scrpts/stop_services.sh
+```
+Restart one or more containers with
+```bash
+./scrpts/restart_service.sh SERVICE [SERVICE...]
 ```
 
 ## Execution
