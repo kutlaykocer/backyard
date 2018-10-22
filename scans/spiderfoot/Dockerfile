@@ -9,6 +9,4 @@ RUN pip install -r requirements.txt
 COPY app.py /
 COPY download/sfcli.py /
 
-# CMD ["python", "sfcli.py", "-s", "http://172.17.0.2:5001"]
 CMD ["python", "app.py"]
-# CMD ["bash"]
