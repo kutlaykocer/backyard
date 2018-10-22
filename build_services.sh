@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 echo "Building all docker services ..."
 
 echo "Build the storage ..."

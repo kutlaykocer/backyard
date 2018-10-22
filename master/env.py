@@ -2,7 +2,7 @@ def dirs(cid):
     return {
         'datadir': '/data/scan_results/{}/'.format(cid),
         'resultdir': '/data/analysis_results/{}/'.format(cid),
-    }
+        }
 
 
 def analysis(cid, name=''):
@@ -12,7 +12,8 @@ def analysis(cid, name=''):
         'resultfile': '{}/result.json'.format(_dir),
         'datadir': dirs(cid)['datadir'],
         'resultdir': _dir,
-    }
+        }
+
 
 def scan(cid, name=''):
     _dir = dirs(cid)['datadir']
@@ -21,4 +22,4 @@ def scan(cid, name=''):
         'donefile': '{}/done_{}.txt'.format(_dir, name),
         'resultfile': '{}/result.txt'.format(_dir),
         'datadir': _dir,
-    }
+        }

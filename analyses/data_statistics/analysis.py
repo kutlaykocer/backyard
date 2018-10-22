@@ -8,7 +8,7 @@ def run(data_dir):
     # dummy data for now
     result = {'number_of_host_IPs': 31337,
               'number_of_emails': 31337,
-             }
+              }
 
     return result
 
