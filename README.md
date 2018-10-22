@@ -45,15 +45,15 @@ docker rm -v storage_container
 ### Scanners
 * set up spiderfoot container with
   ```bash
-  docker build -t spiderfoot_image scans/spiderfoot/download
-  docker run -d -it -p 5001:5001 --rm --name spiderfoot_server spiderfoot_image
-  # connect directly via http://localhost:5001/
+  docker build -t scan_spiderfoot_image scans/spiderfoot/download
+  docker run -d -it -p 5001:5001 --rm --volumes-from storage_container --name scan_spiderfoot_server scan_spiderfoot_image
   ```
   then set up sidecar with
   ```bash
-  docker build -t spiderfoot_sidecar_image scans/spiderfoot
-  docker run -it --rm --link spiderfoot_server:spiderfoot --name spiderfoot_sidecar spiderfoot_sidecar_image
+  docker build -t scan_spiderfoot_sidecar_image scans/spiderfoot
+  docker run -it --rm --volumes-from storage_container --link scan_spiderfoot_server:scan_spiderfoot --name scan_spiderfoot_sidecar scan_spiderfoot_sidecar_image
   ```
+  Check scans directly via http://localhost:5001/
 * theharvester: See setup scripts
 
 
