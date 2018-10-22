@@ -4,16 +4,17 @@ import os
 import re
 import time
 
+import flask
 import requests
 
 
-# TODO: make it a webserver and accept url from http request
+app = flask.Flask(__name__)
 
 
 def html_target():
     # get environmentals
-    _master_addr = os.environ["SCAN_SPIDERFOOT_PORT_5001_TCP_ADDR"]
-    _master_port = os.environ["SCAN_SPIDERFOOT_PORT_5001_TCP_PORT"]
+    _master_addr = os.environ["SCAN_SPIDERFOOT_SERVER_PORT_5001_TCP_ADDR"]
+    _master_port = os.environ["SCAN_SPIDERFOOT_SERVER_PORT_5001_TCP_PORT"]
     _target = "http://{}:{}".format(_master_addr, _master_port)
     return _target
 
@@ -56,9 +57,10 @@ def scan_finished(log, scan_id):
     return False
 
 
+@app.route('/', methods=['POST'])
 def get_spiderfoot_result():
-    cid = 'example'
-    url = 'spiderfoot@gmail.com'
+    cid = flask.request.form['id']
+    url = flask.request.form['url']
 
     # register modules
     modules = ['sfp_pwned', 'sfp_phishtank', 'sfp_pastebin']
@@ -102,4 +104,6 @@ def get_spiderfoot_result():
 
 
 if __name__ == '__main__':
-    get_spiderfoot_result()
+    # Bind to PORT if defined, otherwise default to 5005.
+    _port = int(os.environ.get('PORT', 5005))
+    app.run(host='0.0.0.0', port=_port)

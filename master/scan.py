@@ -9,7 +9,7 @@ import job_mng
 
 
 def gather_data(form_data):
-    _scans = ['THEHARVESTER']
+    _scans = ['THEHARVESTER', 'SPIDERFOOT']
 
     _cid = form_data['id']
 
