@@ -29,12 +29,12 @@ def run_sf_cid(cmd, cid, log):
     _shell_cmd = "python sfcli.py -s {} -e {} -o {}".format(html_target(), _cmd_file, _tmp_log_file)
     print("Executing: " + _shell_cmd + " with spiderfoot command " + cmd)
     # call sf
-    os.system('rm ' + _tmp_log_file)
     os.system(_shell_cmd)
     if log:
         os.system('cat ' + _tmp_log_file + " >> " + _log_file)
     with open(_tmp_log_file, 'r') as myfile:
         output = myfile.read()
+    os.system('rm ' + _tmp_log_file)
     return output
 
 
@@ -42,7 +42,7 @@ def get_scan_id(log):
     regex = re.compile("Scan ID: (.*)")
     finding = regex.search(log)
     scan_id = finding.group(1)
-    print('This is the scan id: "' + scan_id + '"')
+    # print('This is the scan id: "' + scan_id + '"')
     return scan_id
 
 
@@ -70,6 +70,11 @@ def get_spiderfoot_result():
     # define run function wrapper
     def run_sf(cmd, log=True):
         return run_sf_cid(cmd, cid, log)
+
+    # delete logfile if existent:
+    _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(cid)
+    if os.path.isfile(_log_file):
+        os.system("rm " + _log_file)
 
     # run it
     log = run_sf('start {} -m {}'.format(url, ','.join(modules)))
