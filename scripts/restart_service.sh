@@ -14,13 +14,16 @@ start_cmds=()
 containers=""
 for service; do
    echo "Rebuilding service $service ..."
+   # save all containers for quick stop command
    containers="${containers}${service}_container "
    # get start command from start script
    cmd=$(grep "${service}_image" "$DIR/start_services.sh")
    #store in array to use later
    start_cmds+=("$cmd")
-   # build image
-   docker build -t "$service"_image "$service"
+   # get build command from build script
+   cmd=$(grep "${service}_image" "$DIR/build_services.sh")
+   # build the service
+   $cmd
 done
 
 echo "Stopping containers $containers"
