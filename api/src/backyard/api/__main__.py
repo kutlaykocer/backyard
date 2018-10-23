@@ -5,6 +5,7 @@ import backyard.api.proto.api_pb2 as api
 import asyncio
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
+from google.protobuf.json_format import MessageToJson
 
 nc = NATS()
 
@@ -45,6 +46,7 @@ async def run(loop):
         resp.ParseFromString(response.data)
         print("Received response: {message}".format(
             message=resp))
+        print(MessageToJson(resp))
     except ErrTimeout:
         print("Request timed out")
 
