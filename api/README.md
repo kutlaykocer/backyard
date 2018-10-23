@@ -1,8 +1,8 @@
 # API example using proto files
 
 ```
-$ virtualenv-3 --setuptools .env
-$ source .env/bin/activate
+$ python3 -m venv ~/venv
+$ source ~/venv/bin/activate
 $ ./setup.py develop
 $ backyard-api
 ```
