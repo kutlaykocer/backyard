@@ -18,8 +18,6 @@ def analysis(cid, name=''):
 def scan(cid, name=''):
     _dir = dirs(cid)['datadir']
     return {
-        'lockfile': '{}/lock_{}.txt'.format(_dir, name),
-        'donefile': '{}/done_{}.txt'.format(_dir, name),
-        'resultfile': '{}/result.txt'.format(_dir),
+        'resultfile': '{}/result.json'.format(_dir),
         'datadir': _dir,
         }

@@ -20,6 +20,9 @@ def collect_results(analyses, form_data):
         "info": "Done",
         }
 
+    with open(env.scan(_cid)['resultfile']) as result_file:
+        result['scans'] = json.load(result_file)
+
     for ana in analyses:
         _file_path = env.analysis(_cid, ana)['outfile']
         with open(_file_path) as result_file:

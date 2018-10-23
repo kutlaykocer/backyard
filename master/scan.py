@@ -1,5 +1,6 @@
-import os
+import datetime
 import pathlib
+import json
 
 import requests
 import threading
@@ -9,7 +10,7 @@ import job_mng
 
 
 def gather_data(form_data):
-    _scans = ['THEHARVESTER']
+    _scans = ['THEHARVESTER', 'SPIDERFOOT']
 
     _cid = form_data['id']
 
@@ -37,6 +38,21 @@ def gather_data(form_data):
     for thread in threads:
         thread.join()
 
+    _result_file = env.scan(_cid)['resultfile']
+    print('[SCAN] Summarize scans in ' + _result_file)
+
+    result = {
+        "id": _cid,
+        "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
+        "URL": form_data['url'],
+        "domain": form_data['domain'],
+        "info": "Done",
+        "scans": _scans
+        }
+
+    with open(_result_file, 'w') as myfile:
+        json.dump(result, myfile)
+
     print("[SCAN] done!")
-    os.system('touch ' + env.scan(_cid)['resultfile'])
+
     return 'DONE'
