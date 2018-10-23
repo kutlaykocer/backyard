@@ -37,7 +37,7 @@ setup(
 
     entry_points = """
         [console_scripts]
-        backyard-api = backyard.api.main:main
+        backyard-api = backyard.api.__main__:main
         rest-api = backyard.api.rest.__main__:main
     """,
 )
