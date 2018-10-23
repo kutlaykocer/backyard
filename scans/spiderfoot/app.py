@@ -20,34 +20,6 @@ def html_target():
     return _target
 
 
-def run_sf_cid(cmd, cid, log):
-    # prepare cmd
-    _cmd_file = 'sf_cmd.txt'
-    with open(_cmd_file, 'w') as myfile:
-        print(cmd, file=myfile)
-    # prepare other input
-    _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(cid)
-    _tmp_log_file = '/data/scan_results/{}/log_spiderfoot_tmp.txt'.format(cid)
-    _shell_cmd = "python sfcli.py -s {} -e {} -o {}".format(html_target(), _cmd_file, _tmp_log_file)
-    print("Executing: " + _shell_cmd + " with spiderfoot command " + cmd)
-    # call sf
-    os.system(_shell_cmd)
-    if log:
-        os.system('cat ' + _tmp_log_file + " >> " + _log_file)
-    with open(_tmp_log_file, 'r') as myfile:
-        output = myfile.read()
-    os.system('rm ' + _tmp_log_file)
-    return output
-
-
-def get_scan_id(log):
-    regex = re.compile("Scan ID: (.*)")
-    finding = regex.search(log)
-    scan_id = finding.group(1)
-    # print('This is the scan id: "' + scan_id + '"')
-    return scan_id
-
-
 @app.route('/', methods=['POST'])
 def get_spiderfoot_result():
     cid = flask.request.form['id']
@@ -60,36 +32,46 @@ def get_spiderfoot_result():
     for module in modules:
         print("- " + module)
 
-    # define run function wrapper
-    def run_sf(cmd, log=True):
-        return run_sf_cid(cmd, cid, log)
-
-    # delete logfile if existent:
-    _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(cid)
-    if os.path.isfile(_log_file):
-        os.system("rm " + _log_file)
-
     # run it
+    sf_modules = ','.join(modules)
     print('Posting requests to ' + html_target() + ' ...')
-    log = run_sf('start {} -m {}'.format(url, ','.join(modules)))
-    scan_id = get_scan_id(log)
+    payload = {'scanname': cid,
+               'scantarget': url,
+               'usecase': 'all',
+               'modulelist': sf_modules,
+               'typelist': ''}
+    response = requests.post(html_target() + "/startscan", payload)
+    regex = re.compile(r"Internal ID:<\/td><td>(.*)<\/td>")
+    finding = regex.search(response.text)
+    scan_id = finding.group(1)
     print('Scan {} started!'.format(scan_id))
 
     # wait for all scans to finish
+    status = None
     is_done = False
     while not is_done:
         response = requests.get(html_target() + "/scanstatus?id={}".format(scan_id))
-        status = json.loads(response.text)[-1]
-        is_done = status in ['FINISHED']
+        status = json.loads(response.text)[-1].strip()
+        is_done = status not in ['STARTING', 'RUNNING']
         if not is_done:
             print('Scan {} still running ...'.format(scan_id))
             time.sleep(2)
 
-    print('Scan {} finished!'.format(scan_id))
+    if status == 'FINISHED':
+        print('Scan {} finished!'.format(scan_id))
+    else:
+        print('Scan {} finished with error!'.format(scan_id))
+        print('Problem status flag: {}'.format(status))
+        response = requests.get(html_target() + "/scanlog?id={}".format(scan_id))
+        log = json.loads(response.text)
+        _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(cid)
+        print('Dumping log to ' + _log_file)
+        with open(_log_file, 'w') as myfile:
+            print(log, file=myfile)
 
     # download results
     response = requests.get(html_target() + "/scaneventresultexportmulti?ids={}".format(scan_id))
-    _output_file = '/data/scan_results/{}/data_spiderfoot.txt'.format(cid)
+    _output_file = '/data/scan_results/{}/data_spiderfoot.csv'.format(cid)
     print('Saving scan results in ' + _output_file)
     with open(_output_file, 'w') as myfile:
         print(response.text, file=myfile)
