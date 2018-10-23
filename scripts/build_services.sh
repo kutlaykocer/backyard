@@ -8,7 +8,7 @@ docker build -t storage_image storage
 docker create --name storage_container storage_image
 
 echo "Build the scans ..."
-docker build -t scan_spiderfoot_image scans/spiderfoot/download
+docker build -t scan_spiderfoot_server_image scans/spiderfoot/download
 docker build -t scan_spiderfoot_sidecar_image scans/spiderfoot
 docker build -t scan_theharvester_image scans/theharvester
 

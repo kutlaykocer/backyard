@@ -6,7 +6,7 @@ echo "Start NATS ..."
 docker run -d --rm -p 8222:8222 -p 6222:6222 -p 4222:4222 --name nats_container nats
 
 echo "Start the scans ..."
-docker run -d -it -p 5001:5001 --rm --volumes-from storage_container --name scan_spiderfoot_server_container scan_spiderfoot_image
+docker run -d -it -p 5001:5001 --rm --name scan_spiderfoot_server_container scan_spiderfoot_server_image
 docker run -d -it -p 5005:5005 --rm --volumes-from storage_container --link scan_spiderfoot_server_container:scan_spiderfoot_server --name scan_spiderfoot_sidecar_container scan_spiderfoot_sidecar_image
 docker run -d -it -p 5002:5002 --rm --volumes-from storage_container --name scan_theharvester_container scan_theharvester_image
 
