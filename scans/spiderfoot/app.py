@@ -12,13 +12,6 @@ import requests
 app = flask.Flask(__name__)
 
 
-def html_target():
-    # get environmentals
-    _master_addr = os.environ["SCAN_SPIDERFOOT_SERVER_PORT_5001_TCP_ADDR"]
-    _master_port = os.environ["SCAN_SPIDERFOOT_SERVER_PORT_5001_TCP_PORT"]
-    _target = "http://{}:{}".format(_master_addr, _master_port)
-    return _target
-
 
 @app.route('/', methods=['POST'])
 def get_spiderfoot_result():
@@ -27,6 +20,19 @@ def get_spiderfoot_result():
 
     # register modules
     modules = ['sfp_pwned', 'sfp_phishtank', 'sfp_pastebin']
+
+    def html_target(name="SCAN_SPIDERFOOT_SERVER"):
+        # for now just copied from master
+        # TODO: find way to use functions from other dir in docker container and use the html_target function there
+        key_list = list(dict(os.environ).keys())
+        regex_string = r'.*' + name.upper() + r'_PORT_\d{4}_TCP_PORT'
+        port_key = list(filter(lambda x: re.match(regex_string, x), key_list))[0]
+        _port = os.environ[port_key]
+        regex_string = r'.*' + name.upper() + r'_PORT_{}_TCP_ADDR'.format(_port)
+        addr_key = list(filter(lambda x: re.match(regex_string, x), key_list))[0]
+        _addr = os.environ[addr_key]
+        # _addr = os.environ["{}_PORT_{}_TCP_ADDR".format(name.upper(), _port)]
+        return "http://{}:{}/".format(_addr, _port)
 
     print("Calling the spiderfoot server to analyse {} using those modules:".format(url))
     for module in modules:
