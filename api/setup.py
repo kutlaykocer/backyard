@@ -28,11 +28,14 @@ setup(
     ],
     install_requires = [
         'protobuf',
-        'asyncio-nats-client'
+        'asyncio-nats-client',
+        'connexion',
+        'python_dateutil'
         ],
 
     entry_points = """
         [console_scripts]
         backyard-api = backyard.api.main:main
+        rest-api = backyard.api.rest.main:main
     """,
 )

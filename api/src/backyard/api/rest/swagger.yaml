@@ -1,0 +1,200 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "0.0.1"
+  title: "Cyber fighters backyard REST API"
+host: localhost
+basePath: /v1
+schemes:
+- https
+tags:
+- name: ws
+  description: Websocket
+- name: user
+  description: Authentification
+- name: analysis
+  description: Analysis operations
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /user/login:
+    post:
+      tags:
+      - user
+      summary: Logs user into the system
+      x-swagger-router-controller: "rest.user"
+      operationId: "login"
+      parameters:
+      - in: body
+        name: credentials
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request. User ID must be an integer and larger than 0.
+        401:
+          description: Authorization information is missing or invalid.
+        404:
+          description: A user with the specified ID was not found.
+        default:
+          description: Unexpected error.
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: Logs out current logged in user session
+      x-swagger-router-controller: "rest.user"
+      operationId: "logout"
+      responses:
+        '200':
+          description: OK
+  /analysis/:
+    post:
+      tags:
+      - analysis
+      summary: Start a new analysis
+      x-swagger-router-controller: "rest.analysis"
+      operationId: "create"
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AnalyserRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/AnalyserResponse"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Analysis not found
+  /analysis/{id}:
+    get:
+      tags:
+      - analysis
+      summary: Get analysis by ID
+      x-swagger-router-controller: "rest.analysis"
+      operationId: "read"
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the analysis
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/Analysis"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Analysis not found
+    delete:
+      tags:
+      - analysis
+      summary: Delete analysis
+      x-swagger-router-controller: "rest.analysis"
+      operationId: "delete"
+      description: This can only be done by the logged in user.
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the analysis
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Analysis not found
+  /ws:
+    get:
+      tags:
+      - ws
+      summary: Websocket endpoint to subscribe to for status updates
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/JobStatus'
+definitions:
+  Status:
+    type: string
+    description: Current scan/analyzer status
+    enum:
+    - READY
+    - PENDING
+    - WAITING
+    - SCANNING
+    - ANALYZING
+    - TIMEOUT
+    - ERROR
+  Scanner:
+    type: string
+    description: Analyser types
+    enum:
+    - NONE
+    - HARVESTER
+    - SPIDERFOOT
+  ResultCode:
+    type: string
+    description: Common response codes
+    enum:
+    - OK
+    - FAIL
+  Login:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  AnalyserRequest:
+    type: object
+    properties:
+      domain:
+        type: string
+        description: Domain parameter to be scanned
+      scanner:
+        type: integer
+        format: uint32
+        description: Bitmask of "Scanner" enum which enables certain scanners
+  AnalyserResponse:
+    type: object
+    properties:
+      code:
+        $ref: '#/definitions/ResultCode'
+      id:
+        type: string
+        description: Unique ID for this analyser run
+  Analysis:
+    type: object
+    properties:
+      id:
+        type: string
+  JobStatus:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ID of the analyzer run
+      status:
+        $ref: '#/definitions/Status'
+      description:
+        type: string
+        description: Optional description i.e. for certain scan stages
+      completed:
+        type: integer
+        format: in32
+        description: Approximated percent completed
+        minimum: 0
+        maximum: 100
