@@ -3,10 +3,10 @@ info:
   description: ""
   version: "0.0.1"
   title: "Cyber fighters backyard REST API"
-host: localhost
+host: localhost:8080
 basePath: /v1
 schemes:
-- https
+- http
 tags:
 - name: ws
   description: Websocket
@@ -24,7 +24,7 @@ paths:
       tags:
       - user
       summary: Logs user into the system
-      x-swagger-router-controller: "rest.user"
+      x-swagger-router-controller: "backyard.api.rest.user"
       operationId: "login"
       parameters:
       - in: body
@@ -47,7 +47,7 @@ paths:
       tags:
       - user
       summary: Logs out current logged in user session
-      x-swagger-router-controller: "rest.user"
+      x-swagger-router-controller: "backyard.api.rest.user"
       operationId: "logout"
       responses:
         '200':
@@ -57,7 +57,7 @@ paths:
       tags:
       - analysis
       summary: Start a new analysis
-      x-swagger-router-controller: "rest.analysis"
+      x-swagger-router-controller: "backyard.api.rest.analysis"
       operationId: "create"
       parameters:
       - name: request
@@ -79,7 +79,7 @@ paths:
       tags:
       - analysis
       summary: Get analysis by ID
-      x-swagger-router-controller: "rest.analysis"
+      x-swagger-router-controller: "backyard.api.rest.analysis"
       operationId: "read"
       parameters:
       - name: id
@@ -100,7 +100,7 @@ paths:
       tags:
       - analysis
       summary: Delete analysis
-      x-swagger-router-controller: "rest.analysis"
+      x-swagger-router-controller: "backyard.api.rest.analysis"
       operationId: "delete"
       description: This can only be done by the logged in user.
       parameters:
@@ -121,6 +121,8 @@ paths:
       tags:
       - ws
       summary: Websocket endpoint to subscribe to for status updates
+      x-swagger-router-controller: "backyard.api.rest.ws"
+      operationId: "subscribe"
       responses:
         200:
           description: OK
