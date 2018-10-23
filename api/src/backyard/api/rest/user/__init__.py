@@ -1,6 +1,6 @@
 import connexion
 import flask
-from connexion.decorators import decorator
+from decorator import decorator
 
 
 def check_auth(username: str, password: str):

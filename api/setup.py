@@ -30,12 +30,14 @@ setup(
         'protobuf',
         'asyncio-nats-client',
         'connexion',
-        'python_dateutil'
+        'connexion[swagger-ui]',
+        'python_dateutil',
+        'decorator'
         ],
 
     entry_points = """
         [console_scripts]
         backyard-api = backyard.api.main:main
-        rest-api = backyard.api.rest.main:main
+        rest-api = backyard.api.rest.__main__:main
     """,
 )
