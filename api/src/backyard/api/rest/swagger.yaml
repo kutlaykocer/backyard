@@ -7,13 +7,18 @@ host: localhost:8080
 basePath: /v1
 schemes:
 - http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 tags:
-- name: ws
-  description: Websocket
 - name: user
-  description: Authentification
+  description: User management and authentication
 - name: analysis
-  description: Analysis operations
+  description: Listing and triggering analyzer runs
+- name: ws
+  description: Websocket Eventing
 consumes:
 - application/json
 produces:
@@ -46,7 +51,11 @@ paths:
     get:
       tags:
       - user
-      summary: Logs out current logged in user session
+      security:
+        - Bearer: []
+      summary: Logs out current logged in user
+      description: |
+        Invalidates the served JWT. Using the API needs a new JWT.
       x-swagger-router-controller: "backyard.api.rest.user"
       operationId: "logout"
       responses:
@@ -54,6 +63,8 @@ paths:
           description: OK
   /analysis/:
     post:
+      security:
+        - Bearer: []
       tags:
       - analysis
       summary: Start a new analysis
@@ -76,6 +87,8 @@ paths:
           description: Analysis not found
   /analysis/{id}:
     get:
+      security:
+        - Bearer: []    
       tags:
       - analysis
       summary: Get analysis by ID
@@ -97,6 +110,8 @@ paths:
         404:
           description: Analysis not found
     delete:
+      security:
+        - Bearer: []    
       tags:
       - analysis
       summary: Delete analysis
@@ -118,6 +133,8 @@ paths:
           description: Analysis not found
   /ws:
     get:
+      security:
+        - Bearer: []
       tags:
       - ws
       summary: Websocket endpoint to subscribe to for status updates

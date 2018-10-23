@@ -6,3 +6,5 @@ $ source ~/venv/bin/activate
 $ ./setup.py develop
 $ backyard-api
 ```
+
+API explorer: http://localhost:8080/v1/ui/
