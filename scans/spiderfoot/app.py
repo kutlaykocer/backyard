@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import json
 import os
 import re
 import time
@@ -47,16 +48,6 @@ def get_scan_id(log):
     return scan_id
 
 
-def scan_finished(log, scan_id):
-    regex_string = r"{}  \|.*\|(.*)\| [0-9]*".format(scan_id)
-    regex = re.compile(regex_string)
-    finding = regex.search(log)
-    status = finding.group(1).strip()
-    if status == 'FINISHED':
-        return True
-    return False
-
-
 @app.route('/', methods=['POST'])
 def get_spiderfoot_result():
     cid = flask.request.form['id']
@@ -79,19 +70,22 @@ def get_spiderfoot_result():
         os.system("rm " + _log_file)
 
     # run it
+    print('Posting requests to ' + html_target() + ' ...')
     log = run_sf('start {} -m {}'.format(url, ','.join(modules)))
     scan_id = get_scan_id(log)
+    print('Scan {} started!'.format(scan_id))
 
     # wait for all scans to finish
     is_done = False
     while not is_done:
-        log = run_sf('scans -x', log=False)
-        is_done = scan_finished(log, scan_id)
+        response = requests.get(html_target() + "/scanstatus?id={}".format(scan_id))
+        status = json.loads(response.text)[-1]
+        is_done = status in ['FINISHED']
         if not is_done:
+            print('Scan {} still running ...'.format(scan_id))
             time.sleep(2)
 
-    # write scan status to log
-    run_sf('scans -x')
+    print('Scan {} finished!'.format(scan_id))
 
     # download results
     response = requests.get(html_target() + "/scaneventresultexportmulti?ids={}".format(scan_id))
@@ -101,6 +95,7 @@ def get_spiderfoot_result():
         print(response.text, file=myfile)
 
     print("Done!")
+    return 'Finished!'
 
 
 if __name__ == '__main__':
