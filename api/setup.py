@@ -32,12 +32,13 @@ setup(
         'connexion',
         'connexion[swagger-ui]',
         'python_dateutil',
-        'decorator'
+        'aiohttp',
+        'aiohttp_jinja2',
+        'colorlog'
         ],
 
     entry_points = """
         [console_scripts]
         backyard-api = backyard.api.__main__:main
-        rest-api = backyard.api.rest.__main__:main
     """,
 )
