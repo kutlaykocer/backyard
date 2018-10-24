@@ -4,6 +4,7 @@ import aiohttp
 from aiohttp import web, WSMsgType
 import logging
 from backyard.api.__main__ import nc
+from google.protobuf.json_format import MessageToJson
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +20,16 @@ async def subscribe(request_ctx):
     async def status_message_handler(msg):
         subject = msg.subject
         reply = msg.reply
-        data = msg.data.decode()
+
+        protoMsg = api.JobStatus()
+        protoMsg.ParseFromString(msg.data)
+        data = MessageToJson(protoMsg)
+
         if isinstance(data, str):
             await ws.send_str(data, compress=None)
         else:
             await ws.send_json(data)
+
         logger.debug("Received a status message on '{subject} {reply}': {data}".format(
             subject=subject, reply=reply, data=data))
 
