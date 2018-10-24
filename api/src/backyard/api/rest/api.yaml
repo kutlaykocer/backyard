@@ -10,6 +10,7 @@ schemes:
 securityDefinitions:
   basicAuth:
     type: basic
+    x-basicInfoFunc: backyard.api.rest.auth.requires_auth
 tags:
 - name: user
   description: User management and authentication
@@ -22,43 +23,43 @@ consumes:
 produces:
 - application/json
 paths:
-  /user/login:
-    post:
-      tags:
-      - user
-      summary: Logs user into the system
-      x-swagger-router-controller: "backyard.api.rest.user"
-      operationId: "login"
-      parameters:
-      - in: body
-        name: credentials
-        schema:
-          $ref: '#/definitions/Login'
-      responses:
-        200:
-          description: OK
-        400:
-          description: Bad request. User ID must be an integer and larger than 0.
-        401:
-          description: Authorization information is missing or invalid.
-        404:
-          description: A user with the specified ID was not found.
-        default:
-          description: Unexpected error.
-  /user/logout:
-    get:
-      tags:
-      - user
-      security:
-        - basicAuth: []
-      summary: Logs out current logged in user
-      description: |
-        Invalidates the served JWT. Using the API needs a new JWT.
-      x-swagger-router-controller: "backyard.api.rest.user"
-      operationId: "logout"
-      responses:
-        '200':
-          description: OK
+#  /user/login:
+#    post:
+#      tags:
+#      - user
+#      summary: Logs user into the system
+#      x-swagger-router-controller: "backyard.api.rest.routes.user"
+#      operationId: "login"
+#      parameters:
+#      - in: body
+#        name: credentials
+#        schema:
+#          $ref: '#/definitions/Login'
+#      responses:
+#        200:
+#          description: OK
+#        400:
+#          description: Bad request. User ID must be an integer and larger than 0.
+#        401:
+#          description: Authorization information is missing or invalid.
+#        404:
+#          description: A user with the specified ID was not found.
+#        default:
+#          description: Unexpected error.
+#  /user/logout:
+#    get:
+#      tags:
+#      - user
+#      security:
+#        - basicAuth: []
+#      summary: Logs out current logged in user
+#      description: |
+#        Invalidates the served JWT. Using the API needs a new JWT.
+#      x-swagger-router-controller: "backyard.api.rest.routes.user"
+#      operationId: "logout"
+#      responses:
+#        '200':
+#          description: OK
   /analysis/:
     post:
       security:
@@ -66,7 +67,7 @@ paths:
       tags:
       - analysis
       summary: Start a new analysis
-      x-swagger-router-controller: "backyard.api.rest.analysis"
+      x-swagger-router-controller: "backyard.api.rest.routes.analysis"
       operationId: "create"
       parameters:
       - name: request
@@ -83,6 +84,10 @@ paths:
           description: Invalid ID supplied
         404:
           description: Analysis not found
+        500:
+          description: Analysis could not be started
+        504:
+          description: Timeout
   /analysis/{id}:
     get:
       security:
@@ -90,7 +95,7 @@ paths:
       tags:
       - analysis
       summary: Get analysis by ID
-      x-swagger-router-controller: "backyard.api.rest.analysis"
+      x-swagger-router-controller: "backyard.api.rest.routes.analysis"
       operationId: "read"
       parameters:
       - name: id
@@ -113,7 +118,7 @@ paths:
       tags:
       - analysis
       summary: Delete analysis
-      x-swagger-router-controller: "backyard.api.rest.analysis"
+      x-swagger-router-controller: "backyard.api.rest.routes.analysis"
       operationId: "delete"
       description: This can only be done by the logged in user.
       parameters:
@@ -136,7 +141,7 @@ paths:
       tags:
       - ws
       summary: Websocket endpoint to subscribe to for status updates
-      x-swagger-router-controller: "backyard.api.rest.ws"
+      x-swagger-router-controller: "backyard.api.rest.routes.ws"
       operationId: "subscribe"
       responses:
         200:

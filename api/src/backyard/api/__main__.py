@@ -4,19 +4,47 @@ import signal
 import backyard.api.proto.api_pb2 as api
 import asyncio
 from nats.aio.client import Client as NATS
-from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
-from google.protobuf.json_format import MessageToJson
+from nats.aio.errors import ErrNoServers
+from backyard.api.rest.server import RestServer
+import logging
+from logging.config import dictConfig
+
+logging.basicConfig(level=logging.DEBUG)
+
+
+dictConfig({
+    'version': 1,
+    'keys': ['root', 'connexion'],
+    'handlers': {
+        'console': {
+            'class': 'colorlog.StreamHandler',
+            'formatter': 'console'
+        }
+    },
+    'formatters': {
+      'console': {
+          'format': '%(log_color)s%(asctime)s %(levelname)s: [%(threadName)s] %(name)s - %(message)s',
+          'class': 'colorlog.ColoredFormatter'
+      }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': logging.DEBUG
+    },
+    'connexion': {
+        'handlers': ['console'],
+        'level': logging.DEBUG,
+        'qualname': 'connexion.app'
+    }
+})
+
+logger = logging.getLogger(__name__)
 
 nc = NATS()
 
-async def run(loop):
 
-    def status_message_handler(msg):
-        subject = msg.subject
-        reply = msg.reply
-        data = msg.data.decode()
-        print("Received a status message on '{subject} {reply}': {data}".format(
-            subject=subject, reply=reply, data=data))
+async def run():
+    logger.info('initializing nats connection')
 
     async def analyzer_request_handler(msg):
         r = api.AnalyserResponse()
@@ -27,50 +55,23 @@ async def run(loop):
 
     # Subscribe for status messages
     try:
-        await nc.connect("localhost:4222", loop=loop)
+        logger.debug('connecting to nats server...')
+        await nc.connect("localhost:4222")
     except ErrNoServers as e:
         print(e)
         return
 
-    await nc.subscribe("analyzer.status", cb=status_message_handler)
     await nc.subscribe("analyzer.request", cb=analyzer_request_handler)
-
-    # Send a request to the analyzer service
-    ar = api.AnalyserRequest()
-    ar.domain = "bash.org"
-    ar.scanner = api.HARVESTER | api.SPIDERFOOT
-
-    try:
-        response = await nc.request("analyzer.request", ar.SerializeToString(), 0.050)
-        resp = api.AnalyserResponse()
-        resp.ParseFromString(response.data)
-        print("Received response: {message}".format(
-            message=resp))
-        print(MessageToJson(resp))
-    except ErrTimeout:
-        print("Request timed out")
-
-
-def ask_exit():
-    for task in asyncio.Task.all_tasks():
-        task.cancel()
-
-    nc.close()
-    print("Exiting")
-    sys.exit()
 
 
 def main():
+    logger.debug('starting...')
     loop = asyncio.get_event_loop()
+    task = loop.create_task(run())
+    loop.run_until_complete(task)
+    server = RestServer()
+    server.start(port=8080)
 
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, ask_exit)
-
-    asyncio.async(run(loop))
-    loop.run_forever()
-
-    for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.remove_signal_handler(sig)
 
 if __name__ == "__main__":
     main()
