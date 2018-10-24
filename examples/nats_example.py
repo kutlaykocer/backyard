@@ -1,6 +1,8 @@
 # based on https://github.com/nats-io/asyncio-nats
 
 import asyncio
+import json
+
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrTimeout
 
@@ -11,11 +13,12 @@ async def run(loop):
     nc = NATS()
     await nc.connect("nats://localhost:4222", loop=loop)
 
+
     async def message_handler(msg):
         subject = msg.subject
         reply = msg.reply
         data = msg.data.decode()
-        print("Received a message on '{subject} {reply}': {data}".format(
+        print("Received a message on '{subject}' with reply '{reply}': {data}".format(
             subject=subject, reply=reply, data=data))
 
     # Simple publisher and async subscriber via coroutine.
@@ -27,11 +30,12 @@ async def run(loop):
     await nc.publish("foo", b'World')
     await nc.publish("foo", b'!!!!!')
 
+
     async def help_request(msg):
         subject = msg.subject
         reply = msg.reply
         data = msg.data.decode()
-        print("Received a message on '{subject} {reply}': {data}".format(
+        print("Received a message on '{subject}' with reply '{reply}': {data}".format(
             subject=subject, reply=reply, data=data))
         await nc.publish(reply, b'I can help')
 
