@@ -6,7 +6,7 @@ import connexion
 def main():
     app = connexion.App(__name__, specification_dir='./')
     # app.app.json_encoder = encoder.JSONEncoder
-    app.add_api('swagger.yaml', arguments={'title': 'Cyber fighters backyard REST API'})
+    app.add_api('api.yaml', arguments={'title': 'Cyber fighters backyard REST API'})
     app.run(port=8080)
 
 
