@@ -8,10 +8,8 @@ basePath: /v1
 schemes:
 - http
 securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+  basicAuth:
+    type: basic
 tags:
 - name: user
   description: User management and authentication
@@ -52,7 +50,7 @@ paths:
       tags:
       - user
       security:
-        - Bearer: []
+        - basicAuth: []
       summary: Logs out current logged in user
       description: |
         Invalidates the served JWT. Using the API needs a new JWT.
@@ -64,7 +62,7 @@ paths:
   /analysis/:
     post:
       security:
-        - Bearer: []
+        - basicAuth: []
       tags:
       - analysis
       summary: Start a new analysis
@@ -88,7 +86,7 @@ paths:
   /analysis/{id}:
     get:
       security:
-        - Bearer: []    
+        - basicAuth: []
       tags:
       - analysis
       summary: Get analysis by ID
@@ -111,7 +109,7 @@ paths:
           description: Analysis not found
     delete:
       security:
-        - Bearer: []    
+        - basicAuth: []
       tags:
       - analysis
       summary: Delete analysis
@@ -134,7 +132,7 @@ paths:
   /ws:
     get:
       security:
-        - Bearer: []
+        - basicAuth: []
       tags:
       - ws
       summary: Websocket endpoint to subscribe to for status updates
