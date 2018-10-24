@@ -1,11 +1,9 @@
-from backyard.api.rest.auth import requires_auth
+from aiohttp import web
 
 
-def login() -> str:
-    # TODO return JWT
-    return 'OK'
+def login():
+    return web.Response(text='OK')
 
 
-@requires_auth
-def logout():
-    return 'OK'
+async def logout():
+    return web.Response(text='OK')

@@ -1,6 +1,7 @@
 import connexion as connexion
 import flask
 import backyard.api.proto.api_pb2 as api
+from aiohttp import web
 from backyard.api.__main__ import nc
 from google.protobuf.json_format import MessageToJson
 from nats.aio.errors import ErrTimeout
@@ -16,8 +17,6 @@ async def create(request):  # noqa: E501
 
     :rtype: AnalyserResponse
     """
-    if connexion.request.is_json:
-        request = connexion.request.get_json()  # noqa: E501
     # Send a request to the analyzer service
     ar = api.AnalyserRequest()
     ar.domain = request.get('domain')
@@ -29,12 +28,12 @@ async def create(request):  # noqa: E501
         resp.ParseFromString(response.data)
         print("Received response: {message}".format(
             message=resp))
-        return MessageToJson(resp)
+        return web.json_response(MessageToJson(resp))
     except ErrTimeout:
-        return flask.Response('Request timed out', 504)
+        raise web.HTTPGatewayTimeout(reason='Request timed out')
 
 
-def delete(id):  # noqa: E501
+async def delete(id):  # noqa: E501
     """Delete analysis
 
     This can only be done by the logged in user. # noqa: E501
@@ -44,10 +43,10 @@ def delete(id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return web.Response(text='OK')
 
 
-def read(id):  # noqa: E501
+async def read(id):  # noqa: E501
     """Get analysis by ID
 
      # noqa: E501
@@ -57,4 +56,4 @@ def read(id):  # noqa: E501
 
     :rtype: Analysis
     """
-    return 'do some magic!'
+    return web.Response(text='OK')

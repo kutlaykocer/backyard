@@ -6,16 +6,15 @@ import asyncio
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrNoServers
 from backyard.api.rest.server import RestServer
-
-nc = NATS()
-server = RestServer()
-
 import logging
 from logging.config import dictConfig
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 dictConfig({
     'version': 1,
+    'keys': ['root', 'connexion'],
     'handlers': {
         'console': {
             'class': 'colorlog.StreamHandler',
@@ -31,13 +30,20 @@ dictConfig({
     'root': {
         'handlers': ['console'],
         'level': logging.DEBUG
+    },
+    'connexion': {
+        'handlers': ['console'],
+        'level': logging.DEBUG,
+        'qualname': 'connexion.app'
     }
 })
 
 logger = logging.getLogger(__name__)
 
+nc = NATS()
 
-async def run(loop):
+
+async def run():
     logger.info('initializing nats connection')
 
     async def analyzer_request_handler(msg):
@@ -50,7 +56,7 @@ async def run(loop):
     # Subscribe for status messages
     try:
         logger.debug('connecting to nats server...')
-        await nc.connect("localhost:4222", loop=loop)
+        await nc.connect("localhost:4222")
     except ErrNoServers as e:
         print(e)
         return
@@ -58,22 +64,13 @@ async def run(loop):
     await nc.subscribe("analyzer.request", cb=analyzer_request_handler)
 
 
-def ask_exit():
-    server.stop()
-    
-    for task in asyncio.Task.all_tasks():
-        task.cancel()
-
-    nc.close()
-    logger.info("Exiting")
-    sys.exit()
-
-
 def main():
     logger.debug('starting...')
-    server.start(port=8080)
     loop = asyncio.get_event_loop()
-    asyncio.async(run(loop))
+    task = loop.create_task(run())
+    loop.run_until_complete(task)
+    server = RestServer()
+    server.start(port=8080)
 
 
 if __name__ == "__main__":
