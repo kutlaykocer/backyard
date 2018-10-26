@@ -1,4 +1,5 @@
-# Backyard [![Build status](https://travis-ci.com/cyber-fighters/backyard.svg?branch=master)](https://travis-ci.org/andb0t)
+[![Build status](https://travis-ci.com/cyber-fighters/backyard.svg?branch=master)](https://travis-ci.org/andb0t)
+# Backyard
 
 
 ## Todo:
