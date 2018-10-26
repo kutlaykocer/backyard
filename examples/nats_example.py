@@ -13,7 +13,6 @@ async def run(loop):
     nc = NATS()
     await nc.connect("nats://localhost:4222", loop=loop)
 
-
     async def message_handler(msg):
         subject = msg.subject
         reply = msg.reply
@@ -29,7 +28,6 @@ async def run(loop):
     await nc.publish("foo", b'Hello')
     await nc.publish("foo", b'World')
     await nc.publish("foo", b'!!!!!')
-
 
     async def help_request(msg):
         subject = msg.subject
