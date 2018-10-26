@@ -80,9 +80,9 @@ def get_spiderfoot_result():
     _output_file = '/data/scan_results/{}/data_spiderfoot.csv'.format(cid)
     print('Saving scan results in ' + _output_file)
     with open(_output_file, 'w') as myfile:
-        print(response.text, file=myfile)
+        print(response.text.encode('utf-8'), file=myfile)
 
-    print("Done!")
+    print('Done!')
     return 'Finished!'
 
 
