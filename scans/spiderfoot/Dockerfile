@@ -6,6 +6,8 @@ WORKDIR /
 RUN pip install -r requirements.txt
 
 # now add the rest
+ENV TZ=Europe/Berlin
+
 COPY app.py /
 COPY download/sfcli.py /
 

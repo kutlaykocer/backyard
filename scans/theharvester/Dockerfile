@@ -8,7 +8,7 @@ COPY requirements.txt /
 WORKDIR /
 RUN pip3 install -r requirements.txt
 
-
+# now add the rest
 ENV TZ=Europe/Berlin
 
 COPY app.py /
