@@ -6,7 +6,18 @@
 - Migrate to Kubernetes
 
 
+## Installation
+
+### Install git hooks
+To keep commits in a good style, some checks are executed at different stages of the git work stream. Run
+```shell
+./.githook/install-hooks.sh
+```
+to install the hooks.
+
+
 ## Setup
+
 Run the setup scripts, depending on your needs:
 ```bash
 ./scripts/pull_images.sh
@@ -18,6 +29,7 @@ Restart one or more containers with
 ```bash
 ./scripts/restart_service.sh SERVICE [SERVICE...]
 ```
+
 
 ## Execution
 
