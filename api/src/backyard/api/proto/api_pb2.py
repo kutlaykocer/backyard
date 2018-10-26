@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='api.proto',
   package='busapi',
   syntax='proto3',
-  serialized_pb=_b('\n\tapi.proto\x12\x06\x62usapi\"2\n\x0f\x41nalyserRequest\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0f\n\x07scanner\x18\x02 \x01(\r\"@\n\x10\x41nalyserResponse\x12 \n\x04\x63ode\x18\x01 \x01(\x0e\x32\x12.busapi.ResultCode\x12\n\n\x02id\x18\x02 \x01(\t\")\n\x0bScanRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06\x64omain\x18\x02 \x01(\t\"0\n\x0cScanResponse\x12 \n\x04\x63ode\x18\x01 \x01(\x0e\x32\x12.busapi.ResultCode\")\n\rScanCompleted\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04path\x18\x02 \x01(\t\"_\n\tJobStatus\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1e\n\x06status\x18\x02 \x01(\x0e\x32\x0e.busapi.Status\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x11\n\tcompleted\x18\x04 \x01(\r*\x1e\n\nResultCode\x12\x06\n\x02OK\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01*b\n\x06Status\x12\t\n\x05READY\x10\x00\x12\x0b\n\x07PENDING\x10\x01\x12\x0b\n\x07WAITING\x10\x02\x12\x0c\n\x08SCANNING\x10\x03\x12\r\n\tANALYZING\x10\x04\x12\x0b\n\x07TIMEOUT\x10\x0e\x12\t\n\x05\x45RROR\x10\x0f*2\n\x07Scanner\x12\x08\n\x04NONE\x10\x00\x12\r\n\tHARVESTER\x10\x01\x12\x0e\n\nSPIDERFOOT\x10\x02\x62\x06proto3')
+  serialized_pb=_b('\n\tapi.proto\x12\x06\x62usapi\"<\n\x0bScannerInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"d\n\x0c\x41nalyzerInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12%\n\x08scanners\x18\x04 \x03(\x0b\x32\x13.busapi.ScannerInfo\"\x15\n\x13ListAnalyzerRequest\"?\n\x14ListAnalyzerResponse\x12\'\n\tanalyzers\x18\x01 \x03(\x0b\x32\x14.busapi.AnalyzerInfo\"3\n\x0f\x41nalyserRequest\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x10\n\x08\x61nalyzer\x18\x02 \x01(\t\"@\n\x10\x41nalyserResponse\x12 \n\x04\x63ode\x18\x01 \x01(\x0e\x32\x12.busapi.ResultCode\x12\n\n\x02id\x18\x02 \x01(\t\")\n\x0bScanRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06\x64omain\x18\x02 \x01(\t\"0\n\x0cScanResponse\x12 \n\x04\x63ode\x18\x01 \x01(\x0e\x32\x12.busapi.ResultCode\")\n\rScanCompleted\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04path\x18\x02 \x01(\t\"_\n\tJobStatus\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1e\n\x06status\x18\x02 \x01(\x0e\x32\x0e.busapi.Status\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x11\n\tcompleted\x18\x04 \x01(\r*\x1e\n\nResultCode\x12\x06\n\x02OK\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01*b\n\x06Status\x12\t\n\x05READY\x10\x00\x12\x0b\n\x07PENDING\x10\x01\x12\x0b\n\x07WAITING\x10\x02\x12\x0c\n\x08SCANNING\x10\x03\x12\r\n\tANALYZING\x10\x04\x12\x0b\n\x07TIMEOUT\x10\x0e\x12\t\n\x05\x45RROR\x10\x0f\x62\x06proto3')
 )
 
 _RESULTCODE = _descriptor.EnumDescriptor(
@@ -40,8 +40,8 @@ _RESULTCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=372,
-  serialized_end=402,
+  serialized_start=625,
+  serialized_end=655,
 )
 _sym_db.RegisterEnumDescriptor(_RESULTCODE)
 
@@ -83,39 +83,12 @@ _STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=404,
-  serialized_end=502,
+  serialized_start=657,
+  serialized_end=755,
 )
 _sym_db.RegisterEnumDescriptor(_STATUS)
 
 Status = enum_type_wrapper.EnumTypeWrapper(_STATUS)
-_SCANNER = _descriptor.EnumDescriptor(
-  name='Scanner',
-  full_name='busapi.Scanner',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='NONE', index=0, number=0,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='HARVESTER', index=1, number=1,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='SPIDERFOOT', index=2, number=2,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=504,
-  serialized_end=554,
-)
-_sym_db.RegisterEnumDescriptor(_SCANNER)
-
-Scanner = enum_type_wrapper.EnumTypeWrapper(_SCANNER)
 OK = 0
 FAIL = 1
 READY = 0
@@ -125,10 +98,159 @@ SCANNING = 3
 ANALYZING = 4
 TIMEOUT = 14
 ERROR = 15
-NONE = 0
-HARVESTER = 1
-SPIDERFOOT = 2
 
+
+
+_SCANNERINFO = _descriptor.Descriptor(
+  name='ScannerInfo',
+  full_name='busapi.ScannerInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='busapi.ScannerInfo.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='busapi.ScannerInfo.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='busapi.ScannerInfo.description', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21,
+  serialized_end=81,
+)
+
+
+_ANALYZERINFO = _descriptor.Descriptor(
+  name='AnalyzerInfo',
+  full_name='busapi.AnalyzerInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='busapi.AnalyzerInfo.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='busapi.AnalyzerInfo.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='busapi.AnalyzerInfo.description', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='scanners', full_name='busapi.AnalyzerInfo.scanners', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=83,
+  serialized_end=183,
+)
+
+
+_LISTANALYZERREQUEST = _descriptor.Descriptor(
+  name='ListAnalyzerRequest',
+  full_name='busapi.ListAnalyzerRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=185,
+  serialized_end=206,
+)
+
+
+_LISTANALYZERRESPONSE = _descriptor.Descriptor(
+  name='ListAnalyzerResponse',
+  full_name='busapi.ListAnalyzerResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='analyzers', full_name='busapi.ListAnalyzerResponse.analyzers', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=208,
+  serialized_end=271,
+)
 
 
 _ANALYSERREQUEST = _descriptor.Descriptor(
@@ -146,9 +268,9 @@ _ANALYSERREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='scanner', full_name='busapi.AnalyserRequest.scanner', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
+      name='analyzer', full_name='busapi.AnalyserRequest.analyzer', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -164,8 +286,8 @@ _ANALYSERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=21,
-  serialized_end=71,
+  serialized_start=273,
+  serialized_end=324,
 )
 
 
@@ -202,8 +324,8 @@ _ANALYSERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=73,
-  serialized_end=137,
+  serialized_start=326,
+  serialized_end=390,
 )
 
 
@@ -240,8 +362,8 @@ _SCANREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=139,
-  serialized_end=180,
+  serialized_start=392,
+  serialized_end=433,
 )
 
 
@@ -271,8 +393,8 @@ _SCANRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=182,
-  serialized_end=230,
+  serialized_start=435,
+  serialized_end=483,
 )
 
 
@@ -309,8 +431,8 @@ _SCANCOMPLETED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=232,
-  serialized_end=273,
+  serialized_start=485,
+  serialized_end=526,
 )
 
 
@@ -361,13 +483,19 @@ _JOBSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=275,
-  serialized_end=370,
+  serialized_start=528,
+  serialized_end=623,
 )
 
+_ANALYZERINFO.fields_by_name['scanners'].message_type = _SCANNERINFO
+_LISTANALYZERRESPONSE.fields_by_name['analyzers'].message_type = _ANALYZERINFO
 _ANALYSERRESPONSE.fields_by_name['code'].enum_type = _RESULTCODE
 _SCANRESPONSE.fields_by_name['code'].enum_type = _RESULTCODE
 _JOBSTATUS.fields_by_name['status'].enum_type = _STATUS
+DESCRIPTOR.message_types_by_name['ScannerInfo'] = _SCANNERINFO
+DESCRIPTOR.message_types_by_name['AnalyzerInfo'] = _ANALYZERINFO
+DESCRIPTOR.message_types_by_name['ListAnalyzerRequest'] = _LISTANALYZERREQUEST
+DESCRIPTOR.message_types_by_name['ListAnalyzerResponse'] = _LISTANALYZERRESPONSE
 DESCRIPTOR.message_types_by_name['AnalyserRequest'] = _ANALYSERREQUEST
 DESCRIPTOR.message_types_by_name['AnalyserResponse'] = _ANALYSERRESPONSE
 DESCRIPTOR.message_types_by_name['ScanRequest'] = _SCANREQUEST
@@ -376,8 +504,35 @@ DESCRIPTOR.message_types_by_name['ScanCompleted'] = _SCANCOMPLETED
 DESCRIPTOR.message_types_by_name['JobStatus'] = _JOBSTATUS
 DESCRIPTOR.enum_types_by_name['ResultCode'] = _RESULTCODE
 DESCRIPTOR.enum_types_by_name['Status'] = _STATUS
-DESCRIPTOR.enum_types_by_name['Scanner'] = _SCANNER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+ScannerInfo = _reflection.GeneratedProtocolMessageType('ScannerInfo', (_message.Message,), dict(
+  DESCRIPTOR = _SCANNERINFO,
+  __module__ = 'api_pb2'
+  # @@protoc_insertion_point(class_scope:busapi.ScannerInfo)
+  ))
+_sym_db.RegisterMessage(ScannerInfo)
+
+AnalyzerInfo = _reflection.GeneratedProtocolMessageType('AnalyzerInfo', (_message.Message,), dict(
+  DESCRIPTOR = _ANALYZERINFO,
+  __module__ = 'api_pb2'
+  # @@protoc_insertion_point(class_scope:busapi.AnalyzerInfo)
+  ))
+_sym_db.RegisterMessage(AnalyzerInfo)
+
+ListAnalyzerRequest = _reflection.GeneratedProtocolMessageType('ListAnalyzerRequest', (_message.Message,), dict(
+  DESCRIPTOR = _LISTANALYZERREQUEST,
+  __module__ = 'api_pb2'
+  # @@protoc_insertion_point(class_scope:busapi.ListAnalyzerRequest)
+  ))
+_sym_db.RegisterMessage(ListAnalyzerRequest)
+
+ListAnalyzerResponse = _reflection.GeneratedProtocolMessageType('ListAnalyzerResponse', (_message.Message,), dict(
+  DESCRIPTOR = _LISTANALYZERRESPONSE,
+  __module__ = 'api_pb2'
+  # @@protoc_insertion_point(class_scope:busapi.ListAnalyzerResponse)
+  ))
+_sym_db.RegisterMessage(ListAnalyzerResponse)
 
 AnalyserRequest = _reflection.GeneratedProtocolMessageType('AnalyserRequest', (_message.Message,), dict(
   DESCRIPTOR = _ANALYSERREQUEST,

@@ -1,0 +1,9 @@
+analyzer:
+  id: "DUMMY2"
+  name: "Test two"
+  description: |
+    Tests an analyzer with more depenendent scanners.
+  image: "backyard/analyzer2:latest"
+  scanners:
+  - HARVESTER
+  - SPIDERFOOT

@@ -3,7 +3,7 @@
 
 ## Setup
 
-### Setup with pipenv
+### Using virtualenv
 ```
 python3 -m venv ~/venv
 source ~/venv/bin/activate
@@ -11,7 +11,7 @@ source ~/venv/bin/activate
 backyard-api
 ```
 
-### Setup with pipenv
+### Using pipenv
 ```
 pipenv install --skip-lock
 pipenv shell
@@ -20,7 +20,7 @@ backyard-api
 ```
 
 
-## Usage
+## Exploring the API
 
-API explorer: http://localhost:8080/v1/ui/
+URL: http://localhost:8080/v1/ui/
 Default credentials: admin/secret

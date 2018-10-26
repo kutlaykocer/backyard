@@ -1,5 +1,3 @@
-import connexion as connexion
-import flask
 import backyard.api.proto.api_pb2 as api
 from aiohttp import web
 from backyard.api.__main__ import nc
@@ -20,10 +18,10 @@ async def create(request):  # noqa: E501
     # Send a request to the analyzer service
     ar = api.AnalyserRequest()
     ar.domain = request.get('domain')
-    ar.scanner = request.get('scanner')
+    ar.analyzer = request.get('analyzer')
 
     try:
-        response = await nc.request("analyzer.request", ar.SerializeToString(), 0.050)
+        response = await nc.request("analyzer.request", ar.SerializeToString(), 1.0)
         resp = api.AnalyserResponse()
         resp.ParseFromString(response.data)
         print("Received response: {message}".format(

@@ -185,11 +185,12 @@ definitions:
     properties:
       domain:
         type: string
+        example: tuev-sued.de
         description: Domain parameter to be scanned
-      scanner:
-        type: integer
-        format: uint32
-        description: Bitmask of "Scanner" enum which enables certain scanners
+      analyzer:
+        type: string
+        example: DUMMY1
+        description: Name of the analyzer to be run
   AnalyserResponse:
     type: object
     properties:

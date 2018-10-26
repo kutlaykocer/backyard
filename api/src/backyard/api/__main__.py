@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-import sys
-import signal
-import backyard.api.proto.api_pb2 as api
 import asyncio
-from nats.aio.client import Client as NATS
-from nats.aio.errors import ErrNoServers
+
 from backyard.api.rest.server import RestServer
 import logging
 from logging.config import dictConfig
+from nats.aio.client import Client as NATS
+from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
 
 logging.basicConfig(level=logging.DEBUG)
 
+nc = NATS()
 
 dictConfig({
     'version': 1,
@@ -40,35 +39,24 @@ dictConfig({
 
 logger = logging.getLogger(__name__)
 
-nc = NATS()
 
+async def run(loop):
 
-async def run():
-    logger.info('initializing nats connection')
-
-    async def analyzer_request_handler(msg):
-        r = api.AnalyserResponse()
-        r.code = api.OK
-        r.id = "0c5b48b2-d605-11e8-9930-c6851f433179"
-
-        await nc.publish(msg.reply, r.SerializeToString())
-
-    # Subscribe for status messages
+    # Connect to nats
     try:
         logger.debug('connecting to nats server...')
-        await nc.connect("localhost:4222")
+        await nc.connect("localhost:4222", loop=loop)
     except ErrNoServers as e:
-        print(e)
+        logger.error('failed to connect to nats', e)
         return
-
-    await nc.subscribe("analyzer.request", cb=analyzer_request_handler)
 
 
 def main():
     logger.debug('starting...')
     loop = asyncio.get_event_loop()
-    task = loop.create_task(run())
+    task = loop.create_task(run(loop))
     loop.run_until_complete(task)
+
     server = RestServer()
     server.start(port=8080)
 

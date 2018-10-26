@@ -1,0 +1,9 @@
+bus:
+  url: "nats://localhost:4222"
+
+mongodb:
+  url: "mongodb://localhost:27017"
+  gridfs: "fs"
+  users: "user"
+  scans: "scans"
+  reports: "reports"

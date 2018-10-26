@@ -7,7 +7,7 @@ enum ResultCode {
 	FAIL = 1;
 }
 
-// Analyzer Status
+// Analyzer / Scanner Status
 enum Status {
 	READY = 0;
 	PENDING = 1;
@@ -19,19 +19,33 @@ enum Status {
 	ERROR = 15;
 }
 
-// Bitmask to select requested scanners
-enum Scanner {
-	NONE = 0;
-	HARVESTER = 1;
-	SPIDERFOOT = 2;
+message ScannerInfo {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+}
+
+message AnalyzerInfo {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+
+	repeated ScannerInfo scanners = 4;
+}
+
+message ListAnalyzerRequest {
+}
+
+message ListAnalyzerResponse {
+	repeated AnalyzerInfo analyzers = 1;
 }
 
 message AnalyserRequest {
 	// Domain parameter to be scanned
 	string domain = 1;
 
-	// Bitmask of "Scanner" enum which enables certain scanners
-	uint32 scanner = 2;
+	// Name of the analyzer to start
+	string analyzer = 2;
 }
 
 message AnalyserResponse {
