@@ -48,8 +48,8 @@ docker run -it --rm --volumes-from storage_container storage_image ls /data
 ### Networking
 From inside container, contact other containers like this
 ```bash
-env  # see available environmental variables, amongst others the master info
+env  # see available environmental variables, amongst others the IP info
 ping master  # ping [IP_ADDRESS]
-curl --data "url=www.bash.com" 172.17.0.2:5000/request/ # test master
+curl --data "url=www.bash.com" 172.17.0.2:5000/request/ # example to test master
 ```
 Check networking on docker with `docker network inspect bridge`
