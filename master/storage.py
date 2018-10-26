@@ -1,3 +1,4 @@
+"""Communication with storage."""
 import json
 import os
 
@@ -5,6 +6,7 @@ import env
 
 
 def check_storage(form_data):
+    """Check if result file is available in storage."""
     filepath = env.analysis(form_data['id'])['resultfile']
 
     if not os.path.isfile(filepath):

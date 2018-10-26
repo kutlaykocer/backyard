@@ -1,3 +1,4 @@
+"""An analysis to provide basic information on reconnaissance results."""
 import datetime
 import json
 import os
@@ -5,7 +6,7 @@ import sys
 
 
 def run(data_dir):
-
+    """Call the analysis."""
     result = {
         "time": f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}",
         }

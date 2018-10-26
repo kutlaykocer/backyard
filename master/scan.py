@@ -1,3 +1,4 @@
+"""Communication with the scans."""
 import datetime
 import pathlib
 import json
@@ -10,6 +11,7 @@ import job_mng
 
 
 def gather_data(form_data):
+    """Call the scans."""
     _scans = ['THEHARVESTER', 'SPIDERFOOT']
 
     _cid = form_data['id']

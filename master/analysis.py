@@ -1,3 +1,4 @@
+"""Communication with the analyses."""
 import datetime
 import json
 import os
@@ -11,6 +12,7 @@ import job_mng
 
 
 def collect_results(analyses, form_data):
+    """Summarize single analyis results into one json file."""
     _cid = form_data['id']
     result = {
         "id": _cid,
@@ -32,6 +34,7 @@ def collect_results(analyses, form_data):
 
 
 def perform_analysis(form_data):
+    """Call the analyses."""
     _analyses = ['data_statistics', 'dummy']
 
     _cid = form_data['id']

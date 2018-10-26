@@ -1,3 +1,4 @@
+"""A webapp."""
 import os
 
 import flask
@@ -10,11 +11,13 @@ app = flask.Flask(__name__, template_folder='./')
 
 @app.route('/')
 def index():
+    """Render the index html."""
     return flask.render_template('index.html')
 
 
 @app.route('/request/', methods=['POST'])
 def request_result():
+    """Request results."""
     _form_data = {
         'id': flask.request.form['id'],
         'url': flask.request.form['url'],

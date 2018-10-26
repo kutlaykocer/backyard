@@ -1,3 +1,4 @@
+"""A webapp."""
 import os
 
 import flask
@@ -8,6 +9,7 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def request_result():
+    """Call TheHarvester."""
     # define output files
     _result_file = "/data/scan_results/{}/data_theharvester.html".format(flask.request.form['id'])
 

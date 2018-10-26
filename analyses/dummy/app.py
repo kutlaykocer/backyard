@@ -1,3 +1,4 @@
+"""A webapp."""
 import datetime
 import glob
 import json
@@ -14,6 +15,7 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def do_analysis():
+    """Call the analysis and log meta information."""
     # check what data files are available
     data_dir = flask.request.form['datadir']
     data_files = glob.glob(data_dir + "*")

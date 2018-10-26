@@ -1,3 +1,4 @@
+"""A dummy analysis to provide dummy info until required analyses are available."""
 import time
 import sys
 
@@ -5,7 +6,7 @@ from tqdm import tqdm
 
 
 def run(data_dir):
-
+    """Call the analysis."""
     print('Opening datafile in ' + data_dir)
 
     # dummy data for now

@@ -1,10 +1,11 @@
+"""The master script."""
 import analysis
 import storage
 import scan
 
 
 def master_get(form_data):
-
+    """Manage result acquisition."""
     print('[MASTER] call for info on ' + form_data['id'] + ' ...')
 
     # Check if (valid, up to date) json is already there and if yes, return it

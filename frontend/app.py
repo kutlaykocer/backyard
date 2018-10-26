@@ -1,3 +1,4 @@
+"""A webapp."""
 import os
 
 import requests
@@ -9,11 +10,13 @@ app = flask.Flask(__name__, template_folder='./')
 
 @app.route('/')
 def index():
+    """Render the index html."""
     return flask.render_template('index.html')
 
 
 @app.route('/request/', methods=['POST'])
 def call_master():
+    """Request results."""
     # get environmentals
     _master_addr = os.environ["MASTER_PORT_5000_TCP_ADDR"]
     _master_port = os.environ["MASTER_PORT_5000_TCP_PORT"]

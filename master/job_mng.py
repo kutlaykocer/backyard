@@ -1,8 +1,10 @@
+"""Helper functions for jobs."""
 import os
 import re
 
 
 def html_target(name):
+    """Determine html target address."""
     key_list = list(dict(os.environ).keys())
 
     regex_string = r'.*' + name.upper() + r'_PORT_\d{4}_TCP_PORT'

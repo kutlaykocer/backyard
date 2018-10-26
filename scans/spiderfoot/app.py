@@ -1,3 +1,4 @@
+"""A webapp."""
 from __future__ import print_function
 
 import json
@@ -15,9 +16,7 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def get_spiderfoot_result():
-    cid = flask.request.form['id']
-    url = flask.request.form['url']
-
+    """Call TheHarvester."""
     # register modules
     modules = ['sfp_pwned', 'sfp_phishtank', 'sfp_pastebin']
 
@@ -34,15 +33,15 @@ def get_spiderfoot_result():
         # _addr = os.environ["{}_PORT_{}_TCP_ADDR".format(name.upper(), _port)]
         return "http://{}:{}/".format(_addr, _port)
 
-    print("Calling the spiderfoot server to analyse {} using those modules:".format(url))
+    print("Calling the spiderfoot server to analyse {} using those modules:".format(flask.request.form['url']))
     for module in modules:
         print("- " + module)
 
     # run it
     sf_modules = ','.join(modules)
     print('Posting requests to ' + html_target() + ' ...')
-    payload = {'scanname': cid,
-               'scantarget': url,
+    payload = {'scanname': flask.request.form['id'],
+               'scantarget': flask.request.form['url'],
                'usecase': 'all',
                'modulelist': sf_modules,
                'typelist': ''}
@@ -70,14 +69,14 @@ def get_spiderfoot_result():
         print('Problem status flag: {}'.format(status))
         response = requests.get(html_target() + "/scanlog?id={}".format(scan_id))
         log = json.loads(response.text)
-        _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(cid)
+        _log_file = '/data/scan_results/{}/log_spiderfoot.txt'.format(flask.request.form['id'])
         print('Dumping log to ' + _log_file)
         with open(_log_file, 'w') as myfile:
             print(log, file=myfile)
 
     # download results
     response = requests.get(html_target() + "/scaneventresultexportmulti?ids={}".format(scan_id))
-    _output_file = '/data/scan_results/{}/data_spiderfoot.csv'.format(cid)
+    _output_file = '/data/scan_results/{}/data_spiderfoot.csv'.format(flask.request.form['id'])
     print('Saving scan results in ' + _output_file)
     with open(_output_file, 'w') as myfile:
         print(response.text.encode('utf-8'), file=myfile)
