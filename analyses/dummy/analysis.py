@@ -1,8 +1,7 @@
 """A dummy analysis to provide dummy info until required analyses are available."""
+import json
 import time
 import sys
-
-from tqdm import tqdm
 
 
 def run(data_dir):
@@ -10,16 +9,36 @@ def run(data_dir):
     print('Opening datafile in ' + data_dir)
 
     # dummy data for now
-    result = {'interesting_info0': 0,
-              'interesting_info1': 1,
-              'interesting_info2': 2,
-              'interesting_info3': 3,
-              }
+    cyber_risk = {'general': 8}
+    cyber_risk_change_history = {'general': [5, 5, 4, 8, 8, 9, 8]}
+    result = {
+        'top': {
+            'cyber_risk': cyber_risk,
+            'cyber_risk_change_history': cyber_risk_change_history,
+            },
+        'mid': {
+            'statistics': {
+                'unique_emails': 23,
+                'unique_emails_last': 26,
+                'certificate_warnings': 3,
+                'risk_high': 8,
+                'risk_mid': 20,
+                'risk_low': 128,
+            },
+        },
+        'low': {
+            'findings':
+                [
+                    {'cat': 'email', 'fnd': 'hans.dampf@test.de', 'rel': 5, 'src': ['OWA', 'mail_leak'], 'risk': 6, 'mtg': 'change password, update '},
+                    {'cat': 'email', 'fnd': 'franz.dampf@test.de', 'rel': 3, 'src': ['mail_leak'], 'risk': 2, 'mtg': 'change password'},
+                    {'cat': 'email', 'fnd': 'heinz.dampf@test.de', 'rel': 9, 'src': ['mail_leak'], 'risk': 4, 'mtg': 'change password'},
+                ],
+            },
+        }
 
-    # wait dummy time
-    for i in tqdm(range(0, 10)):
-        time.sleep(0.7)
-        print('- doing important analysis work, part {} ...'.format(i))
+    time.sleep(2)
+    print(json.dumps(result, indent=4))
+
 
     return result
 
