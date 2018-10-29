@@ -23,7 +23,7 @@ async def run(loop):
             tmp.seek(0)
             await gfs.upload_from_stream(filename=filename,
                                          source=tmp,
-                                         metadata={'contentType': 'text',
+                                         metadata={'contentType': 'application/json',
                                                    'compressed': False})
 
     # Connect to nats
