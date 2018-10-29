@@ -1,4 +1,6 @@
 import asyncio
+import tempfile
+
 import motor.motor_asyncio
 import os
 import time
@@ -9,10 +11,20 @@ from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
 
 nc = NATS()
 
-
 async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
+
+    # Use Motor to put compressed data in GridFS, with filename "my_file".
+    async def put_gridfile(data, filename):
+        with tempfile.TemporaryFile() as tmp:
+            tmp.write(data)
+            gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(client.my_database)
+            tmp.seek(0)
+            await gfs.upload_from_stream(filename=filename,
+                                         source=tmp,
+                                         metadata={'contentType': 'text',
+                                                   'compressed': False})
 
     # Connect to nats
     try:
@@ -24,7 +36,6 @@ async def run(loop):
 
     # Connect to database
     client = motor.motor_asyncio.AsyncIOMotorClient()
-    db = client['backyard']
 
     # start the dummy process
     runtime = 60
@@ -48,6 +59,7 @@ async def run(loop):
         print('Error: %s' % e)
 
     # write data to db
+    await put_gridfile(b'{"result": "some fake data"}', '%s-scanner-example.json' % analyzer_id)
 
 
 def main():
