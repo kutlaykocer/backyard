@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import signal
+import traceback
+
 import backyard.api.proto.api_pb2 as api
 import backyard.supervisor.config as config
 from backyard.supervisor.nats import nc
@@ -60,8 +62,22 @@ async def run(loop):
 
     async def list_analyzer_request_handler(msg):
         r = api.ListAnalyzerResponse()
-        r.analyzers = config.Config.get_instance().get_analyzers()
-        await nc.publish(msg.reply, r.SerializeToString())
+        try:
+            for analyzer in config.Config.get_instance().get_analyzers():
+                a = r.analyzers.add()
+                a.id = analyzer["id"]
+                a.name = analyzer["name"]
+                a.description = analyzer["description"]
+                for scanner in analyzer["scanners"]:
+                    s = a.scanners.add()
+                    # s.id = scanner.id
+                    s.name = scanner
+                    # s.description = scanner.description
+
+            await nc.publish(msg.reply, r.SerializeToString())
+        except Exception as e:
+            logger.error('Error: %s' % e)
+            traceback.print_exc()
 
     # Subscribe for status messages
     try:

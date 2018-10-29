@@ -18,6 +18,8 @@ tags:
   description: Listing and triggering analyzer runs
 - name: ws
   description: Websocket Eventing
+- name: analyzers
+  description: Handle available analyzers
 consumes:
 - application/json
 produces:
@@ -60,6 +62,24 @@ paths:
 #      responses:
 #        '200':
 #          description: OK
+  /analyzers/:
+    get:
+      security:
+      - basicAuth: []
+      tags:
+      - analyzers
+      summary: Get a list of available analyzers
+      x-swagger-router-controller: "backyard.api.rest.routes.analyzers"
+      operationId: "list"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/ListAnalyzerResponse"
+        404:
+          description: no analyzers available
+        504:
+          description: Timeout
   /analysis/:
     post:
       security:
@@ -199,6 +219,32 @@ definitions:
       id:
         type: string
         description: Unique ID for this analyser run
+  ListAnalyzerResponse:
+    type: array
+    items:
+      $ref: '#/definitions/AnalyzerInfo'
+  AnalyzerInfo:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      scanners:
+        type: array
+        items:
+          $ref: '#/definitions/ScannerInfo'
+  ScannerInfo:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
   Analysis:
     type: object
     properties:
