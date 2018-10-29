@@ -47,21 +47,20 @@ async def start(req):
     return a_id, api.OK
 
 
-
 async def scan_status_handler(msg):
     req = api.JobStatus()
     req.ParseFromString(msg.data)
 
     a_id = req.id
     parts = msg.subject.split('.')
-    scanner = parts[1]
+    _scanner = parts[1]
 
     # Load analyzer entry from mongo
     collection = db.analyzer
     document = await collection.find_one({'id': a_id})
 
     # Valid scanner?
-    if not scanner in document['scanner']:
+    if not _scanner in document['scanner']:
         logging.warning('invalid scanner for current analyzer')
         return
 
@@ -71,7 +70,7 @@ async def scan_status_handler(msg):
 
         # Remove this scanner from the current analysis
         scanners = document['scanners']
-        scanners.remove(scanner)
+        scanners.remove(_scanner)
         update['scanners'] = scanners
 
         # We're the last one so - tadaa, we're ready
@@ -80,12 +79,14 @@ async def scan_status_handler(msg):
             logging.info("all scanners for %s are ready" % a_id)
             start_analyzer(document)
         else:
-            logging.info('scanner %s for %s: %d%% completed' % (scanner, a_id, req.completed))
+            logging.info('scanner %s for %s: %d%% completed' % (_scanner, a_id, req.completed))
 
         result = await collection.update_one({'id': a_id}, {'$set': update})
         if result is None:
             logging.error('failed to update analyzer run')
             return
+
+        await scanner.update(_scanner, document['domain'], req)
 
     # ... not ready - update status
     else:
@@ -100,9 +101,7 @@ async def scan_status_handler(msg):
 
         # TODO: handle errors (status ERROR, etc.)
 
-        logging.info('scanner %s for %s: %d%% completed' % (scanner, a_id, req.completed))
-
-    return
+        logging.info('scanner %s for %s: %d%% completed' % (_scanner, a_id, req.completed))
 
 
 def start_analyzer(dsc):

@@ -27,7 +27,6 @@ async def start(a_id, scan, req):
             'id': scan,
             'domain': req.domain,
             'progress': 0.0,
-            'completed': False,
             'status': api.PENDING
         }
         result = await collection.insert_one(document)
@@ -38,3 +37,24 @@ async def start(a_id, scan, req):
 
     # If successful, create entry in mongodb
     return api.OK
+
+async def update(scanner, domain, req):
+    collection = db.scans
+
+    if req.status == api.READY:
+        # Remove ready scans from mongodb
+        result = await collection.delete_many({'$and': [{'id': scanner}, {'domain': domain}]})
+        if result is None:
+            logging.error('unable to remove scanner entry')
+            return
+
+    else:
+        # Update scanner information
+        u = {
+            'progress': req.completed,
+            'status': req.status
+        }
+
+        result = await collection.update_one({'$and': [{'id': scanner}, {'domain': domain}]}, {'$set': u})
+        if result is None:
+            logging.error('failed to update scanner run')
