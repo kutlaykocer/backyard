@@ -56,26 +56,55 @@ async def scan_status_handler(msg):
     parts = msg.subject.split('.')
     scanner = parts[1]
 
-    #// Current scan/analyzer status
-	#Status status = 2;
-    #
-	#// Optional description i.e. for certain scan stages
-	#string description = 3;
-    #
-	#// Approximated percent completed
-	#uint32 completed = 4;
+    # Load analyzer entry from mongo
+    collection = db.analyzer
+    document = await collection.find_one({'id': a_id})
 
-    # analyze id from message
-    # domain from analyzer entry
-    # scanner type from subject
-    # extract status information
+    # Valid scanner?
+    if not scanner in document['scanner']:
+        logging.warning('invalid scanner for current analyzer')
+        return
 
-    # ready?
-    # remove this scanner from mongodb
-    # remove this scanner from the current analysis
-    # check if all required scans for this analysis have finished
+    # Scanner ready?
+    if req.status == api.READY:
+        update = {}
 
-    # when we're ready:
-    # logging.info('starting analyzer image %s for domain %s' % (analyzer.image, req.domain))
-    # Run docker image/kubernetes POD creation
+        # Remove this scanner from the current analysis
+        scanners = document['scanners']
+        scanners.remove(scanner)
+        update['scanners'] = scanners
+
+        # We're the last one so - tadaa, we're ready
+        if len(scanners) == 0:
+            update['status'] = api.ANALYZING
+            logging.info("all scanners for %s are ready" % a_id)
+            start_analyzer(document)
+        else:
+            logging.info('scanner %s for %s: %d%% completed' % (scanner, a_id, req.completed))
+
+        result = await collection.update_one({'id': a_id}, {'$set': update})
+        if result is None:
+            logging.error('failed to update analyzer run')
+            return
+
+    # ... not ready - update status
+    else:
+        update = {}
+        if document['status'] == api.PENDING:
+            update['status'] = api.SCANNING
+
+            result = await collection.update_one({'id': a_id}, {'$set': update})
+            if result is None:
+                logging.error('failed to update analyzer run')
+                return
+
+        # TODO: handle errors (status ERROR, etc.)
+
+        logging.info('scanner %s for %s: %d%% completed' % (scanner, a_id, req.completed))
+
     return
+
+
+def start_analyzer(dsc):
+    logging.info('starting analyzer image %s for domain %s' % (dsc.image, dsc.domain))
+    # TODO: Run docker image/kubernetes POD creation
