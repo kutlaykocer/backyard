@@ -20,7 +20,7 @@ async def start(a_id, scan, req):
         logging.info('starting scan %s for %s' % (scan, req.domain))
 
         # TODO: Run docker image/kubernetes POD creation
-        print('docker run -i --net=host -e DOMAIN="%s" -e ANALYZER="%s" %s' % (req.domain, a_id, scanner['image']))
+        print('docker run -it --net=host -e DOMAIN="%s" -e ANALYZER="%s" %s' % (req.domain, a_id, scanner['image']))
 
         # Save this scan to the db for reference
         document = {
