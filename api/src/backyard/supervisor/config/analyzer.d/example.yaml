@@ -1,8 +1,8 @@
 analyzer:
   id: "EXAMPLE"
-  name: "Runner for the dummy example scanner"
+  name: "Example Analyzer"
   description: |
-    Tests an analyzer with just one depenendent scanner.
+    Analyzer example using the example scanner.
   image: "backyard/analyzer-example:latest"
   scanners:
   - EXAMPLE

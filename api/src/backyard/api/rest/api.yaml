@@ -25,43 +25,43 @@ consumes:
 produces:
 - application/json
 paths:
-#  /user/login:
-#    post:
-#      tags:
-#      - user
-#      summary: Logs user into the system
-#      x-swagger-router-controller: "backyard.api.rest.routes.user"
-#      operationId: "login"
-#      parameters:
-#      - in: body
-#        name: credentials
-#        schema:
-#          $ref: '#/definitions/Login'
-#      responses:
-#        200:
-#          description: OK
-#        400:
-#          description: Bad request. User ID must be an integer and larger than 0.
-#        401:
-#          description: Authorization information is missing or invalid.
-#        404:
-#          description: A user with the specified ID was not found.
-#        default:
-#          description: Unexpected error.
-#  /user/logout:
-#    get:
-#      tags:
-#      - user
-#      security:
-#        - basicAuth: []
-#      summary: Logs out current logged in user
-#      description: |
-#        Invalidates the served JWT. Using the API needs a new JWT.
-#      x-swagger-router-controller: "backyard.api.rest.routes.user"
-#      operationId: "logout"
-#      responses:
-#        '200':
-#          description: OK
+  #  /user/login:
+  #    post:
+  #      tags:
+  #      - user
+  #      summary: Logs user into the system
+  #      x-swagger-router-controller: "backyard.api.rest.routes.user"
+  #      operationId: "login"
+  #      parameters:
+  #      - in: body
+  #        name: credentials
+  #        schema:
+  #          $ref: '#/definitions/Login'
+  #      responses:
+  #        200:
+  #          description: OK
+  #        400:
+  #          description: Bad request. User ID must be an integer and larger than 0.
+  #        401:
+  #          description: Authorization information is missing or invalid.
+  #        404:
+  #          description: A user with the specified ID was not found.
+  #        default:
+  #          description: Unexpected error.
+  #  /user/logout:
+  #    get:
+  #      tags:
+  #      - user
+  #      security:
+  #        - basicAuth: []
+  #      summary: Logs out current logged in user
+  #      description: |
+  #        Invalidates the served JWT. Using the API needs a new JWT.
+  #      x-swagger-router-controller: "backyard.api.rest.routes.user"
+  #      operationId: "logout"
+  #      responses:
+  #        '200':
+  #          description: OK
   /analyzers/:
     get:
       security:
@@ -83,7 +83,7 @@ paths:
   /analysis/:
     post:
       security:
-        - basicAuth: []
+      - basicAuth: []
       tags:
       - analysis
       summary: Start a new analysis
@@ -108,10 +108,25 @@ paths:
           description: Analysis could not be started
         504:
           description: Timeout
+    get:
+      security:
+      - basicAuth: []
+      tags:
+      - analysis
+      summary: Get a list of analyses
+      x-swagger-router-controller: "backyard.api.rest.routes.analysis"
+      operationId: "listAnalyses"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Analysis"
   /analysis/{id}:
     get:
       security:
-        - basicAuth: []
+      - basicAuth: []
       tags:
       - analysis
       summary: Get analysis by ID
@@ -134,7 +149,7 @@ paths:
           description: Analysis not found
     delete:
       security:
-        - basicAuth: []
+      - basicAuth: []
       tags:
       - analysis
       summary: Delete analysis
@@ -154,10 +169,12 @@ paths:
           description: Invalid ID supplied
         404:
           description: Analysis not found
+        500:
+          description: Error deleting analyzer entry
   /ws:
     get:
       security:
-        - basicAuth: []
+      - basicAuth: []
       tags:
       - ws
       summary: Websocket endpoint to subscribe to for status updates
@@ -250,6 +267,25 @@ definitions:
     properties:
       id:
         type: string
+        description: ID of the analyzer run
+      domain:
+        type: string
+        description: Domain parameter that is scanned
+      progress:
+        type: integer
+        format: uint32
+        description: Approximated percent completed
+      completed:
+        type: boolean
+        description: Completion status of the analysis
+      status:
+        $ref: '#/definitions/Status'
+        description: Current analyzer status
+      scanners:
+        type: array
+        description: List of used scanner IDs
+        items:
+          type: string
   JobStatus:
     type: object
     properties:

@@ -1,8 +1,15 @@
+import logging
+
 import backyard.api.proto.api_pb2 as api
 from aiohttp import web
+from backyard.api import utils
 from backyard.api.__main__ import nc
 from google.protobuf.json_format import MessageToJson
 from nats.aio.errors import ErrTimeout
+from backyard.supervisor.mongo import db
+from bson.json_util import dumps
+
+logger = logging.getLogger(__name__)
 
 
 async def create(request):  # noqa: E501
@@ -41,7 +48,19 @@ async def delete(id):  # noqa: E501
 
     :rtype: None
     """
-    return web.Response(text='OK')
+    if not utils.is_uuid(id):
+        raise web.HTTPBadRequest(reason='Invalid ID supplied')
+
+    try:
+        result = await db.analyzer.deleteOne({'id': id})
+        if result.deleted_count == 1:
+            return web.Response()
+        else:
+            raise web.HTTPNotFound(reason='Analysis not found')
+
+    except Exception as e:
+        logger.error('Error deleting analyzer entry: %s' % e)
+        raise web.HTTPInternalServerError(reason='%s' % e)
 
 
 async def read(id):  # noqa: E501
@@ -54,4 +73,24 @@ async def read(id):  # noqa: E501
 
     :rtype: Analysis
     """
-    return web.Response(text='OK')
+    print(id)
+    if not utils.is_uuid(id):
+        raise web.HTTPBadRequest(reason='Invalid ID supplied')
+
+    # Load analyzer entry from mongo
+    collection = db.analyzer
+    document = await collection.find_one({'id': id})
+    if document is None:
+        raise web.HTTPNotFound(reason='Analysis not found')
+
+    return web.json_response(document, dumps=dumps)
+
+
+async def listAnalyses():
+    """Get a list of analyses"""
+    result = []
+    cursor = db.analyzer.find()
+    for a in await cursor.to_list(length=100):
+        result.append(a)
+
+    return web.json_response(result, dumps=dumps)

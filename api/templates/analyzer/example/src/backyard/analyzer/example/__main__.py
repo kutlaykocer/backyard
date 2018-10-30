@@ -4,8 +4,6 @@ import tempfile
 
 import motor.motor_asyncio
 import os
-import time
-import random
 import backyard.api.proto.api_pb2 as api
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrNoServers
@@ -16,7 +14,6 @@ nc = NATS()
 async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
-    scanner_id = 'EXAMPLE'
 
     # Use Motor to put compressed data in GridFS, with filename "my_file".
     async def put_gridfile(data, filename, folder):
@@ -42,36 +39,41 @@ async def run(loop):
     # Connect to database
     client = motor.motor_asyncio.AsyncIOMotorClient()
 
-    # start the dummy process
-    runtime = 60
-    now = 0
+    folder = '/%s/%s' % (domain, analyzer_id)
+    status_topic = 'scanner.%s.status' % analyzer_id
 
-    try:
-        status = api.JobStatus()
-        status.id = analyzer_id
-        status.status = api.SCANNING
-        while status.completed < 100:
-            wait_for = random.randint(1, 5)
-            now += wait_for
-            time.sleep(wait_for)
-            status.completed = min(100, round(100/runtime * now))
-            print('sending %s completed to nats topic: scanner.%s.status' % (status.completed, "EXAMPLE"))
-            await nc.publish('scanner.%s.status' % "EXAMPLE", status.SerializeToString())
-            await nc.flush(0.500)
+    status = api.JobStatus()
+    status.id = analyzer_id
+    status.status = api.ANALYZING
+    await nc.publish(status_topic, status.SerializeToString())
+    await nc.flush(0.500)
 
-        status.status = api.READY
-        status.completed = 100
-        status.status = api.READY
-        await nc.publish('scanner.%s.status' % "EXAMPLE", status.SerializeToString())
-        await nc.flush(0.500)
-        await nc.drain()
-    except Exception as e:
-        print('Error: %s' % e)
+    # collect scanner result files from gridFs
+    gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(client.my_database)
+    cursor = gfs.find({'metadata.folder': folder})
 
-    # write data to db
-    await put_gridfile(json.dumps({"result": "some fake data from example scanner"}).encode('utf-8'), '%s.json' % scanner_id,
-                       '/%s/%s' % (domain,
-                                                                                                                        analyzer_id))
+    aggregated_data = {}
+
+    while await cursor.fetch_next:
+        grid_data = cursor.next_object()
+        if grid_data.filename == 'result.json':
+            continue
+        data = await grid_data.read()
+        aggregated_data[grid_data.filename] = data.decode('utf-8')
+
+    await put_gridfile(json.dumps(aggregated_data, ensure_ascii=False).encode('utf-8'), 'result.json', folder)
+
+    status.status = api.READY
+    status.completed = 100
+    await nc.publish(status_topic, status.SerializeToString())
+    await nc.flush(0.500)
+
+    s = api.ScanCompleted()
+    s.id = analyzer_id
+    s.path = '%s/result.json' % folder
+    await nc.publish('analyzer.status', s.SerializeToString())
+    await nc.flush(0.500)
+    await nc.drain()
 
 
 def main():
