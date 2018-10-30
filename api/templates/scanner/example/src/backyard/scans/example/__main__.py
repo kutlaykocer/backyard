@@ -18,7 +18,7 @@ async def run(loop):
     scanner_id = 'EXAMPLE'
 
     # Use Motor to put compressed data in GridFS, with filename "my_file".
-    async def put_gridfile(data, filename):
+    async def put_gridfile(data, filename, folder):
         with tempfile.TemporaryFile() as tmp:
             tmp.write(data)
             gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(client.my_database)
@@ -26,7 +26,7 @@ async def run(loop):
             await gfs.upload_from_stream(filename=filename,
                                          source=tmp,
                                          metadata={'contentType': 'application/json',
-                                                   'compressed': False})
+                                                   'folder': folder})
 
     # Connect to nats
     try:
@@ -58,6 +58,7 @@ async def run(loop):
             await nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
             await nc.flush(0.500)
 
+        status.status = api.READY
         status.completed = 100
         await nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
         await nc.flush(0.500)
@@ -66,7 +67,7 @@ async def run(loop):
         print('Error: %s' % e)
 
     # write data to db
-    await put_gridfile(b'{"result": "some fake data from example scanner"}', '/%s/%s/%s.json' % (domain, analyzer_id, scanner_id))
+    await put_gridfile(b'{"result": "some fake data from example scanner"}', '%s.json' % scanner_id, '/%s/%s' % (domain, analyzer_id))
 
 
 def main():
