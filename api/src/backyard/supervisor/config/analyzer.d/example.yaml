@@ -1,0 +1,8 @@
+analyzer:
+  id: "EXAMPLE"
+  name: "Example Analyzer"
+  description: |
+    Analyzer example using the example scanner.
+  image: "backyard/analyzer-example:latest"
+  scanners:
+  - EXAMPLE
