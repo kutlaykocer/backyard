@@ -1,0 +1,4 @@
+scanner:
+  name: "Example"
+  id: "EXAMPLE"
+  image: "backyard/scanner-example:latest"
