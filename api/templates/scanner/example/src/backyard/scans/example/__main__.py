@@ -1,4 +1,5 @@
 import asyncio
+import json
 import tempfile
 
 import motor.motor_asyncio
@@ -67,7 +68,9 @@ async def run(loop):
         print('Error: %s' % e)
 
     # write data to db
-    await put_gridfile(b'{"result": "some fake data from example scanner"}', '%s.json' % scanner_id, '/%s/%s' % (domain, analyzer_id))
+    await put_gridfile(json.dumps({"result": "some fake data from example scanner"}).encode('utf-8'), '%s.json' % scanner_id,
+                       '/%s/%s' % (domain,
+                                                                                                                        analyzer_id))
 
 
 def main():
