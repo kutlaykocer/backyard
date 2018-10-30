@@ -7,7 +7,7 @@ import time
 import random
 import backyard.api.proto.api_pb2 as api
 from nats.aio.client import Client as NATS
-from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
+from nats.aio.errors import ErrNoServers
 
 nc = NATS()
 
@@ -15,6 +15,7 @@ nc = NATS()
 async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
+    scanner_id = 'EXAMPLE'
 
     # Use Motor to put compressed data in GridFS, with filename "my_file".
     async def put_gridfile(data, filename):
@@ -65,7 +66,7 @@ async def run(loop):
         print('Error: %s' % e)
 
     # write data to db
-    await put_gridfile(b'{"result": "some fake data"}', '%s-scanner-example.json' % analyzer_id)
+    await put_gridfile(b'{"result": "some fake data from example scanner"}', '/%s/%s/%s.json' % (domain, analyzer_id, scanner_id))
 
 
 def main():
