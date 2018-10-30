@@ -1,5 +1,6 @@
 import logging
 import backyard.supervisor.config as config
+import backyard.supervisor.pod as pod
 import backyard.api.proto.api_pb2 as api
 from backyard.supervisor.mongo import db
 
@@ -18,9 +19,7 @@ async def start(a_id, scan, req):
     res = await collection.count_documents({'$and': [{'domain': req.domain}, {'id': scan}]})
     if res == 0:
         logging.info('starting scan %s for %s' % (scan, req.domain))
-
-        # TODO: Run docker image/kubernetes POD creation
-        print('docker run -i --net=host -e DOMAIN="%s" -e ANALYZER="%s" %s' % (req.domain, a_id, scanner['image']))
+        pod.run(scanner['image'], a_id, req.domain)
 
         # Save this scan to the db for reference
         document = {

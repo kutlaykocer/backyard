@@ -85,7 +85,7 @@ async def run(loop):
         await nc.connect("localhost:4222", loop=loop)
 
         # Add a subscription to check for scanner status
-        await nc.subscribe('scanner.*.status', cb=analyzer.scan_status_handler)
+        await nc.subscribe('scanner.>', cb=analyzer.scan_status_handler)
     except ErrNoServers as e:
         logger.error('failed to connect to nats', e)
         return

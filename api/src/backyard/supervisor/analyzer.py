@@ -1,6 +1,7 @@
 import uuid
 import logging
 import backyard.supervisor.config as config
+import backyard.supervisor.pod as pod
 import backyard.api.proto.api_pb2 as api
 import backyard.supervisor.scanner as scanner
 from backyard.supervisor.mongo import db
@@ -48,6 +49,7 @@ async def start(req):
 
 
 async def scan_status_handler(msg):
+    logging.info('message received')
     req = api.JobStatus()
     req.ParseFromString(msg.data)
 
@@ -106,4 +108,4 @@ async def scan_status_handler(msg):
 
 def start_analyzer(dsc):
     logging.info('starting analyzer image %s for domain %s' % (dsc.image, dsc.domain))
-    # TODO: Run docker image/kubernetes POD creation
+    pod.run(dsc.image, dsc.id, dsc.domain)
