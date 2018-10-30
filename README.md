@@ -42,7 +42,7 @@ Available webapps:
 ### Storage
 Peek into the storage volume:
 ```bash
-docker run -it --rm --volumes-from storage_container storage_image ls /data
+docker run -it --rm --volumes-from storage_container storage_image bash
 ```
 
 ### Networking
