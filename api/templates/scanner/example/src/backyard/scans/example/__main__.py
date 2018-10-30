@@ -11,6 +11,7 @@ from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
 
 nc = NATS()
 
+
 async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
@@ -33,6 +34,8 @@ async def run(loop):
     except ErrNoServers as e:
         print('failed to connect to nats', e)
         return
+    except Exception as e:
+        print('Error: %s' % e)
 
     # Connect to database
     client = motor.motor_asyncio.AsyncIOMotorClient()
@@ -51,10 +54,13 @@ async def run(loop):
             time.sleep(wait_for)
             status.completed = min(100, round(100/runtime * now))
             print('sending %s completed to nats topic: scanner.%s.status' % (status.completed, analyzer_id))
-            nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
+            await nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
+            await nc.flush(0.500)
 
         status.completed = 100
-        nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
+        await nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
+        await nc.flush(0.500)
+        await nc.drain()
     except Exception as e:
         print('Error: %s' % e)
 
