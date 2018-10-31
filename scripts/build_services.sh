@@ -11,6 +11,7 @@ echo "Build the scans ..."
 docker build -t scan_spiderfoot_server_image scans/spiderfoot/download
 docker build -t scan_spiderfoot_sidecar_image scans/spiderfoot
 docker build -t scan_theharvester_image scans/theharvester
+docker build -t scan_nmap_image scans/nmap
 
 echo "Build the analyses ..."
 docker build -t analysis_data_statistics_image analyses/data_statistics
