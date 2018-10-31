@@ -25,7 +25,7 @@ to install the hooks.
 
 Run the setup scripts, depending on your needs:
 ```bash
-./scripts/pull_images.sh
+./scripts/install.sh  # downloads software and docker images
 ./scripts/build_services.sh
 ./scripts/start_services.sh
 ./scripts/stop_services.sh
