@@ -56,13 +56,14 @@ async def run(loop):
             now += wait_for
             time.sleep(wait_for)
             status.completed = min(100, round(100/runtime * now))
-            print('sending %s completed to nats topic: scanner.%s.status' % (status.completed, analyzer_id))
-            await nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
+            print('sending %s completed to nats topic: scanner.%s.status' % (status.completed, "EXAMPLE"))
+            await nc.publish('scanner.%s.status' % "EXAMPLE", status.SerializeToString())
             await nc.flush(0.500)
 
         status.status = api.READY
         status.completed = 100
-        await nc.publish('scanner.%s.status' % analyzer_id, status.SerializeToString())
+        status.status = api.READY
+        await nc.publish('scanner.%s.status' % "EXAMPLE", status.SerializeToString())
         await nc.flush(0.500)
         await nc.drain()
     except Exception as e:
