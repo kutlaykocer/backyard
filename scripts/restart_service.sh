@@ -27,7 +27,8 @@ for service; do
 done
 
 echo "Stopping containers $containers"
-docker stop "$containers"
+# shellcheck disable=SC2086
+docker stop $containers
 
 echo "Restarting containers ..."
 for cmd in "${start_cmds[@]}"; do
