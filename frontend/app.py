@@ -24,7 +24,7 @@ def call_master():
     # call master
     _payload = {'id': flask.request.form['id'],
                 'url': flask.request.form['url'],
-                'domain': flask.request.form['url'].split('www.')[1],
+                'domain': flask.request.form['url'].split('www.')[-1].split('http://')[-1],
                 }
     _req = requests.post(_target, data=_payload)
     # Return result

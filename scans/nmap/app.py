@@ -14,8 +14,7 @@ def request_result():
     _result_file = "/data/scan_results/{}/data_nmap.xml".format(flask.request.form['id'])
 
     # define command
-    # TODO: scan flask.request.form['domain'] instead
-    _cmd = "nmap http://scanme.nmap.org/ -oX {}".format(_result_file)
+    _cmd = "nmap {} -oX {}".format(flask.request.form['domain'], _result_file)
 
     # run it
     print("Executing: " + _cmd)
