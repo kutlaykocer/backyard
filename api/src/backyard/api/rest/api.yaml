@@ -171,6 +171,26 @@ paths:
           description: Analysis not found
         500:
           description: Error deleting analyzer entry
+  /fs/{path}:
+    get:
+      security:
+      - basicAuth: []
+      tags:
+      - filesystem
+      summary: Access filesystem
+      x-swagger-router-controller: "backyard.api.rest.routes.filesystem"
+      operationId: "read_file"
+      parameters:
+      - name: path
+        in: path
+        description: The file path
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: File not found
   /ws:
     get:
       security:

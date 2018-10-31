@@ -15,11 +15,15 @@ async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
 
+    # Connect to database
+    client = motor.motor_asyncio.AsyncIOMotorClient()
+    db = client['backyard']
+    gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(db)
+
     # Use Motor to put compressed data in GridFS, with filename "my_file".
     async def put_gridfile(data, filename, folder):
         with tempfile.TemporaryFile() as tmp:
             tmp.write(data)
-            gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(client.my_database)
             tmp.seek(0)
             await gfs.upload_from_stream(filename=filename,
                                          source=tmp,
@@ -36,9 +40,6 @@ async def run(loop):
     except Exception as e:
         print('Error: %s' % e)
 
-    # Connect to database
-    client = motor.motor_asyncio.AsyncIOMotorClient()
-
     folder = '/%s/%s' % (domain, analyzer_id)
     status_topic = 'scanner.%s.status' % analyzer_id
 
@@ -49,7 +50,6 @@ async def run(loop):
     await nc.flush(0.500)
 
     # collect scanner result files from gridFs
-    gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(client.my_database)
     cursor = gfs.find({'metadata.folder': folder})
 
     aggregated_data = {}

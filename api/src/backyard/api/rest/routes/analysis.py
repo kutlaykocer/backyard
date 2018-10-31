@@ -73,7 +73,6 @@ async def read(id):  # noqa: E501
 
     :rtype: Analysis
     """
-    print(id)
     if not utils.is_uuid(id):
         raise web.HTTPBadRequest(reason='Invalid ID supplied')
 
