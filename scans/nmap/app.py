@@ -26,6 +26,5 @@ def request_result():
 
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5006.
     _port = int(os.environ.get('PORT', 5006))
     app.run(host='0.0.0.0', port=_port)

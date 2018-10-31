@@ -86,6 +86,5 @@ def get_spiderfoot_result():
 
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5005.
     _port = int(os.environ.get('PORT', 5005))
     app.run(host='0.0.0.0', port=_port)

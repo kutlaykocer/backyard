@@ -34,6 +34,5 @@ def call_master():
 
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 8080.
     _port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=_port)
