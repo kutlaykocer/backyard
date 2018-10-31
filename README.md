@@ -8,7 +8,6 @@
 - geoip: location
 - whois: DNS info
 - cve: get info about threats, vulns and exploits (cvw.mitre.org -> check mitre matrices)
-- nmap
 
 
 ## Installation
