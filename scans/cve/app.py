@@ -10,7 +10,6 @@ app = flask.Flask(__name__)
 @app.route('/', methods=['POST'])
 def request_result():
     """Call nmap."""
-
     # TODO: analyze all tools the customer uses + the ones we detect ourselves
     _tools = ['microsoft/office']
 
