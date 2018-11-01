@@ -1,17 +1,25 @@
 """A webapp."""
+import itertools
 import os
 
 import flask
 
 
 app = flask.Flask(__name__)
+app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
 
 @app.route('/', methods=['POST'])
 def request_result():
     """Call nmap."""
-    # TODO: analyze all tools the customer uses + the ones we detect ourselves
-    _tools = ['microsoft/office']
+    # extract products from html payload
+    _products = []
+    for i in itertools.count():
+        _product = flask.request.form.get('product' + str(i))
+        if _product is None:
+            break
+        _products.append(_product)
+    print('Find vulns of those products:', _products)
 
     # define output files
     _result_file = "/data/scan_results/{}/data_cve.xml".format(flask.request.form['id'])
@@ -19,8 +27,8 @@ def request_result():
     # define commands
     _cmds = []
     _cmds.append('touch ' + _result_file)
-    for tool in _tools:
-        _cmds.append("curl https://cve.circl.lu/api/search/{} >> {}".format(tool, _result_file))
+    for product in _products:
+        _cmds.append("curl https://cve.circl.lu/api/search/{} >> {}".format(product, _result_file))
 
     # run it
     for cmd in _cmds:
