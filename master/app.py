@@ -18,12 +18,7 @@ def index():
 @app.route('/request/', methods=['POST'])
 def request_result():
     """Request results."""
-    _form_data = {
-        'id': flask.request.form['id'],
-        'url': flask.request.form['url'],
-        'domain': flask.request.form['domain']
-        }
-    _result = master.master_get(_form_data)
+    _result = master.master_get(flask.request.form.to_dict())
     return flask.jsonify(_result)
 
 
