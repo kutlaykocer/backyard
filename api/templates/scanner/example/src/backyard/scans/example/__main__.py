@@ -44,7 +44,7 @@ async def run(loop):
         # save result and send the ScanCompleted message
         folder = '/data/%s' % domain
         file = os.path.join(folder, '%s.json' % scanner_id)
-        with open(file) as f:
+        with open(file, 'w') as f:
             f.write('{"result": "this scanner does nothing"}')
 
         status.status = api.READY
