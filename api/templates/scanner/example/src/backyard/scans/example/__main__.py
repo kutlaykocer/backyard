@@ -13,6 +13,7 @@ async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
     scanner_id = 'EXAMPLE'
+    status_topic = 'scanner.%s.status' % scanner_id
 
     # Connect to nats
     try:
@@ -37,8 +38,8 @@ async def run(loop):
             now += wait_for
             time.sleep(wait_for)
             status.completed = min(100, round(100/runtime * now))
-            print('sending %s completed to nats topic: scanner.%s.status' % (status.completed, scanner_id))
-            await nc.publish('scanner.%s.status' % scanner_id, status.SerializeToString())
+            print('sending %s completed to nats topic: %s' % (status.completed, status_topic))
+            await nc.publish(status_topic, status.SerializeToString())
             await nc.flush(0.500)
 
         # save result and send the ScanCompleted message
@@ -50,11 +51,12 @@ async def run(loop):
         status.status = api.READY
         status.completed = 100
         status.path = file
-        await nc.publish('scanner.%s.status' % scanner_id, status.SerializeToString())
+        await nc.publish(status_topic, status.SerializeToString())
         await nc.flush(0.500)
         await nc.drain()
     except Exception as e:
         print('Error: %s' % e)
+
 
 def main():
     print('starting...')
