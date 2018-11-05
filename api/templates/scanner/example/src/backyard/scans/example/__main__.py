@@ -56,7 +56,6 @@ async def run(loop):
     except Exception as e:
         print('Error: %s' % e)
 
-
 def main():
     print('starting...')
     loop = asyncio.get_event_loop()
