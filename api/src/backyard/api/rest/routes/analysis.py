@@ -1,6 +1,7 @@
 import logging
 
 import backyard.api.proto.api_pb2 as api
+import motor.motor_asyncio
 from aiohttp import web
 from backyard.api import utils
 from backyard.api.__main__ import nc
@@ -93,3 +94,26 @@ async def listAnalyses():
         result.append(a)
 
     return web.json_response(result, dumps=dumps)
+
+
+async def read_result(id):  # noqa: E501
+    """Access result.json from filesystem
+
+    :param path: file path
+    :type path: string
+    """
+    collection = db.analyzer
+    document = await collection.find_one({'id': id})
+    gfs = motor.motor_asyncio.AsyncIOMotorGridFSBucket(db)
+    if document is None:
+        raise web.HTTPNotFound(reason='Analysis not found')
+    folder = "/%s/%s" % (document.domain, id)
+    cursor = gfs.find({'metadata.folder': folder, 'filename': 'result.json'})
+
+    await cursor.fetch_next
+    grid_data = cursor.next_object()
+    if grid_data is None:
+        raise web.HTTPNotFound()
+    data = await grid_data.read()
+
+    return web.Response(body=data.decode('utf-8'), content_type=grid_data.metadata['contentType'])

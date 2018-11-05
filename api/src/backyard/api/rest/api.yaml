@@ -171,19 +171,19 @@ paths:
           description: Analysis not found
         500:
           description: Error deleting analyzer entry
-  /fs/{path}:
+  /analysis/{id}/result:
     get:
       security:
       - basicAuth: []
       tags:
-      - filesystem
-      summary: Access filesystem
-      x-swagger-router-controller: "backyard.api.rest.routes.filesystem"
-      operationId: "read_file"
+      - analysis
+      summary: Get analysis by ID
+      x-swagger-router-controller: "backyard.api.rest.routes.analysis"
+      operationId: "read_result"
       parameters:
-      - name: path
+      - name: id
         in: path
-        description: The file path
+        description: The ID of the analysis
         required: true
         type: string
       responses:
@@ -246,7 +246,7 @@ definitions:
         description: Domain parameter to be scanned
       analyzer:
         type: string
-        example: DUMMY1
+        example: EXAMPLE
         description: Name of the analyzer to be run
   AnalyserResponse:
     type: object
