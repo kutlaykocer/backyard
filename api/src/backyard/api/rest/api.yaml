@@ -115,7 +115,7 @@ paths:
       - analysis
       summary: Get a list of analyses
       x-swagger-router-controller: "backyard.api.rest.routes.analysis"
-      operationId: "listAnalyses"
+      operationId: "list_analyses"
       responses:
         200:
           description: OK
