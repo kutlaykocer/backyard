@@ -23,13 +23,6 @@ async def start(req):
 
     a_id = str(uuid.uuid4())
 
-    logging.info('starting scans for analysis:')
-    for scan in analyzer['scanners']:
-        res = await scanner.start(a_id, scan, req)
-        if res != api.OK:
-            logging.error('failed to start scanner %s' % scan)
-            return "", api.ERROR
-
     # Save this analyzer run to the db for reference
     collection = db.analyzer
     document = {
@@ -39,12 +32,21 @@ async def start(req):
         'progress': 0.0,
         'completed': False,
         'status': api.PENDING,
-        'scanners': analyzer['scanners']
+        'scanners': analyzer['scanners'],
+        'results': {},
+        'path': ''
     }
     result = await collection.insert_one(document)
     if result is None:
         logging.error('failed to insert analyzer run')
         return "", api.ERROR
+
+    logging.info('starting scans for analysis:')
+    for scan in analyzer['scanners']:
+        res = await scanner.start(a_id, scan, req)
+        if res != api.OK:
+            logging.error('failed to start scanner %s' % scan)
+            return "", api.ERROR
 
     # If successful, create entry in mongodb
     return a_id, api.OK
@@ -80,11 +82,14 @@ async def scan_status_handler(msg):
             scanners = document['scanners']
             scanners.remove(_scanner)
             update['scanners'] = scanners
+            update['results'] = document['results']
+            update['results'][_scanner] = req.path
 
             # We're the last one so - tadaa, we're ready
             if len(scanners) == 0:
                 update['status'] = api.ANALYZING
                 logging.info("all scanners for %s are ready" % a_id)
+                document['results'] = update['results']
                 start_analyzer(document)
             else:
                 logging.info('scanner %s for %s: %d%% completed' % (_scanner, a_id, req.completed))
@@ -117,4 +122,4 @@ async def scan_status_handler(msg):
 
 def start_analyzer(dsc):
     logging.info('starting analyzer image %s for domain %s' % (dsc['image'], dsc['domain']))
-    pod.run(dsc['image'], dsc['id'], dsc['domain'])
+    pod.run(dsc['image'], dsc['id'], dsc['domain'], dsc['results'])
