@@ -27,8 +27,7 @@ setup(
     install_requires = [
         'protobuf',
         'asyncio-nats-client',
-        'colorlog',
-        'motor'
+        'colorlog'
         ],
 
     entry_points = """
