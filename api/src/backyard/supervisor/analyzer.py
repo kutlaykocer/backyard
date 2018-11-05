@@ -1,5 +1,6 @@
 import traceback
 import uuid
+import os
 import logging
 import backyard.supervisor.config as config
 import backyard.supervisor.pod as pod
@@ -22,6 +23,11 @@ async def start(req):
         return "", api.ERROR
 
     a_id = str(uuid.uuid4())
+
+    p = os.path.join("/tmp", "data", req.domain)
+    if not os.path.exists(p):
+        os.makedirs(p)
+        os.chmod(p, 0o777)
 
     # Save this analyzer run to the db for reference
     collection = db.analyzer

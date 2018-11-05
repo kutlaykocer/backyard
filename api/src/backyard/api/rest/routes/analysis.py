@@ -1,7 +1,7 @@
 import logging
 
 import backyard.api.proto.api_pb2 as api
-import motor.motor_asyncio
+import os
 from aiohttp import web
 from backyard.api import utils
 from backyard.api.__main__ import nc
@@ -96,7 +96,7 @@ async def list_analyses():
     return web.json_response(result, dumps=dumps)
 
 
-async def read_result(id):  # noqa: E501
+async def read_result(request_ctx, id):  # noqa: E501
     """Access result.json from filesystem
 
     :param path: file path
@@ -107,4 +107,17 @@ async def read_result(id):  # noqa: E501
     if document is None:
         raise web.HTTPNotFound(reason='Analysis not found')
 
-    return web.FileResponse(document.result)
+    p = "/tmp" + document["path"]
+    if not os.path.exists(p):
+        raise web.HTTPNotFound(reason='Analysis not found')
+
+    with open(p, 'rb') as f:
+        resp = web.StreamResponse(headers={
+            'CONTENT-DISPOSITION': 'attachment; filename="%s"' % p
+        })
+        resp.content_type = 'application/json'
+        data = f.read()
+        resp.content_length = len(data)
+        await resp.prepare(request_ctx)
+        await resp.write(data)
+        return resp
