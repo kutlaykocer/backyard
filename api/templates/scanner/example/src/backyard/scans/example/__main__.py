@@ -71,8 +71,7 @@ async def run(loop):
 
     # write data to db
     await put_gridfile(json.dumps({"result": "some fake data from example scanner"}).encode('utf-8'), '%s.json' % scanner_id,
-                       '/%s/%s' % (domain,
-                                                                                                                        analyzer_id))
+                       '/%s/%s' % (domain, analyzer_id))
 
 
 def main():
