@@ -41,21 +41,14 @@ async def run(loop):
             await nc.publish('scanner.%s.status' % scanner_id, status.SerializeToString())
             await nc.flush(0.500)
 
-        status.status = api.READY
-        status.completed = 100
-        status.status = api.READY
-        await nc.publish('scanner.%s.status' % scanner_id, status.SerializeToString())
-        await nc.flush(0.500)
-
         # save result and send the ScanCompleted message
         folder = '/data/%s' % domain
-        if not os.path.exists(folder):
-            os.makedirs(folder)
         file = os.path.join(folder, '%s.json' % scanner_id)
         with open(file) as f:
             f.write('{"result": "this scanner does nothing"}')
-        status = api.ScanCompleted()
-        status.id = analyzer_id
+
+        status.status = api.READY
+        status.completed = 100
         status.path = file
         await nc.publish('scanner.%s.status' % scanner_id, status.SerializeToString())
         await nc.flush(0.500)
