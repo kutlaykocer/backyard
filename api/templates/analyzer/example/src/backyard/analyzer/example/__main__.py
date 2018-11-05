@@ -11,9 +11,10 @@ nc = NATS()
 async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
+    scans = os.environ['SCANS']
     id = 'EXAMPLE'
     folder = '/data/%s' % domain
-    status_topic = 'scanner.%s.status' % analyzer_id
+    status_topic = 'analyzer.%s.status' % id
 
     # Connect to nats
     try:
@@ -32,7 +33,9 @@ async def run(loop):
     await nc.flush(0.500)
 
     aggregated_data = {}
-    # TODO: read scanner files
+    for scanner_id, path in scans.value():
+        with open(path) as f:
+            aggregated_data[scanner_id] = f.read()
 
     file = os.path.join(folder, 'result-%s.json' % analyzer_id)
     with open(file, 'w') as f:
