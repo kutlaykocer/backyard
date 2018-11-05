@@ -120,6 +120,59 @@ async def scan_status_handler(msg):
         logging.error(e)
         traceback.print_exc()
 
+
+async def analyzer_status_handler(msg):
+    try:
+        logging.info('message received')
+        req = api.JobStatus()
+        req.ParseFromString(msg.data)
+
+        a_id = req.id
+        parts = msg.subject.split('.')
+        _analyzer = parts[1]
+
+        # Load analyzer entry from mongo
+        collection = db.analyzer
+        document = await collection.find_one({'id': a_id})
+
+        # Valid?
+        if document is None:
+            logging.warning('unknown analysis - skipping')
+            return
+
+        # Ready?
+        if req.status == api.READY:
+            update = {}
+            update['status'] = api.READY
+            update['path'] = req.path
+
+            result = await collection.update_one({'id': a_id}, {'$set': update})
+            if result is None:
+                logging.error('failed to update analyzer run')
+                return
+
+            logging.info('analyzer %s is ready: %s' % (_analyzer, req.path))
+
+        # ... not ready - update status
+        else:
+            update = {}
+            if document['status'] == api.PENDING:
+                update['status'] = api.ANALYZING
+
+                result = await collection.update_one({'id': a_id}, {'$set': update})
+                if result is None:
+                    logging.error('failed to update analyzer run')
+                    return
+
+            # TODO: handle errors (status ERROR, etc.)
+
+            logging.info('analyzer %s for %s: %d%% completed' % (_analyzer, a_id, req.completed))
+
+    except Exception as e:
+        logging.error(e)
+        traceback.print_exc()
+
+
 def start_analyzer(dsc):
     logging.info('starting analyzer image %s for domain %s' % (dsc['image'], dsc['domain']))
     pod.run(dsc['image'], dsc['id'], dsc['domain'], dsc['results'])

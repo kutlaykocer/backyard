@@ -11,7 +11,7 @@ nc = NATS()
 async def run(loop):
     analyzer_id = os.environ['ANALYZER']
     domain = os.environ['DOMAIN']
-    scans = os.environ['SCANS']
+    scans = json.loads(os.environ['SCANS'])
     id = 'EXAMPLE'
     folder = '/data/%s' % domain
     status_topic = 'analyzer.%s.status' % id
@@ -33,7 +33,7 @@ async def run(loop):
     await nc.flush(0.500)
 
     aggregated_data = {}
-    for scanner_id, path in scans.value():
+    for scanner_id, path in scans.items():
         with open(path) as f:
             aggregated_data[scanner_id] = f.read()
 
