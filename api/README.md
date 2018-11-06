@@ -1,26 +1,68 @@
 # API example using proto files
 
 
-## Setup
+## Local development setup
 
-### Using virtualenv
+### Prerequisites
+
+To run a local, non *kubernetes* development installation, you need these local accessible components:
+
+ * [Docker](https://www.docker.com/get-started)
+ * [NATS](https://github.com/nats-io/gnatsd/releases)
+ * [MongoDB](https://www.mongodb.com/download-center/community)
+
+Start *NATS* via `gnatsd`. Run *MongoDB* using `mkdir -p /tmp/db && mongodb --dbpath /tmp/db`.
+
+### Initialize submodules
 ```
-python3 -m venv ~/venv
-source ~/venv/bin/activate
-./setup.py develop
-backyard-api
+git submodule init --update
 ```
 
-### Using pipenv
+### Build components
+
+Build main processes (API server and Supervisor):
+
 ```
 pipenv install --skip-lock
 pipenv shell
 ./setup.py develop
+```
+
+Build example scanner in `templates/scanner/example`:
+
+```
+docker build -t backyard/scanner-example:latest .
+```
+
+Build example analyzer in `templates/analyzer/example`:
+
+```
+docker build -t backyard/analyzer-example:latest .
+```
+
+### Running the service
+
+The *supervisor* contains logic to start scanners and analyzers and sits right on top of
+*NATS* to serve the requests. Start it using:
+
+```
+backyard-supervisor
+```
+
+The *api* server exposes the swagger defined API to an unencrypted local HTTP service. Make
+sure that this is i.e. proxied by an SSL enabled *nginx* instance if made public.
+
+```
 backyard-api
 ```
 
+You can now start the `EXAMPLE` analysis using the API (i.e. via the swagger interface).
 
 ## Exploring the API
-
-URL: http://localhost:8080/v1/ui/
 Default credentials: admin/secret
+
+### Swagger endpoint
+URL: http://localhost:8080/v1/ui/
+
+### UI endpoint
+URL: http://localhost:8080/v1
