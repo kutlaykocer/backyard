@@ -14,7 +14,9 @@ def request_result():
     _result_file = "/data/scan_results/{}/data_nmap.xml".format(flask.request.form['id'])
 
     # define command
-    _cmd = "nmap {} -oX {}".format(flask.request.form['domain'], _result_file)
+    cvss_cut_off = 7
+    _cmd = "nmap -sS -F -sV --script vulners --script-args mincvss={} {} -oX {}".\
+        format(cvss_cut_off, flask.request.form['domain'], _result_file)
 
     # run it
     print("Executing: " + _cmd)

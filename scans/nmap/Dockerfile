@@ -2,6 +2,7 @@ FROM kalilinux/kali-linux-docker
 
 RUN apt-get update
 RUN apt-get install -y python3 python3-pip nmap
+RUN wget -O /usr/share/nmap/scripts/vulners.nse https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
 
 # use pip caching (COPYs and ADDs in this order!)
 COPY requirements.txt /
